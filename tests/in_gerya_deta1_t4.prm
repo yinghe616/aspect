@@ -97,7 +97,7 @@ end
 ############### Parameters describing what to do with the solution
 
 subsection Postprocess
-  set List of postprocessors = visualization, velocity statistics, composition statistics
+  set List of postprocessors = visualization, velocity statistics, composition statistics, composition BPL statistics
   subsection Visualization
     set Output format                 = vtu
     set Time between graphical output = 0.5e6
