@@ -937,6 +937,8 @@ namespace aspect
           update_JxW_values);
       std::vector<double> compositional_values(n_q_points);
       
+      std::vector<types::global_dof_index> local_dof_indices (finite_element.dofs_per_cell);
+      
       typename DoFHandler<dim>::active_cell_iterator
         cell = dof_handler.begin_active(),
              endc = dof_handler.end();
@@ -955,13 +957,14 @@ namespace aspect
         {
           if (cell->is_locally_owned())
           {
+            cell->get_dof_indices (local_dof_indices);
             fe_values.reinit (cell);
             local_area_integrals=0;
             for (unsigned int q=0; q<n_q_points; ++q)
             {
               local_area_integrals+= fe_values.JxW(q);
             }
-            std::cout << "local average"<< local_area_integrals<<std::endl;
+       //     std::cout << "local average"<< local_area_integrals<<std::endl;
             local_compositional_average_integrals[c]=0;
             fe_values[introspection.extractors.compositional_fields[c]].get_function_values(vector,
                 compositional_values);
@@ -970,7 +973,7 @@ namespace aspect
               local_compositional_average_integrals[c]+= compositional_values[q]*fe_values.JxW(q);
             }
             local_compositional_average_integrals[c] /= local_area_integrals;
-            std::cout << "local compositional average"<< local_compositional_average_integrals[c]<<std::endl;
+         //   std::cout << "local compositional average"<< local_compositional_average_integrals[c]<<std::endl;
 
             min_composition=compositional_values[0];
             max_composition=compositional_values[0];
@@ -981,7 +984,7 @@ namespace aspect
               max_composition = std::max<double> (max_composition,
                   compositional_values[q]);
             }
-            std::cout << "local max/min"<< min_composition<<max_composition<<std::endl;
+           // std::cout << "local max/min"<< min_composition<<max_composition<<std::endl;
             // find the trouble cell
             if (min_composition <C_min || max_composition >C_max)
             {
@@ -990,10 +993,31 @@ namespace aspect
                     /(max_composition-local_compositional_average_integrals[c])));
               theta_T=std::min<double>(theta_T,abs((C_min-local_compositional_average_integrals[c])
                     /(min_composition-local_compositional_average_integrals[c])));
-              std::cout << "theta_T"<< theta_T<<std::endl;
+             // std::cout << "theta_T"<< theta_T<<std::endl;
               //Modify the numerical solution at freedoms
+              std::vector<double> t_tmp(finite_element.base_element(introspection.base_elements.compositional_fields).dofs_per_cell);
+              for (unsigned int j=0; j<finite_element.base_element(introspection.base_elements.compositional_fields).dofs_per_cell; ++j)
+                    {
+                      unsigned int support_point_index
+                        = finite_element.component_to_system_index(introspection.component_indices.compositional_fields[c],
+                                                                   /*dof index within component=*/ j);
+                      t_tmp[j]=vector(local_dof_indices[support_point_index]);
+               //       std::cout << "C before "<< t_tmp[j]<<std::endl;
+                      t_tmp[j]=theta_T*(t_tmp[j]-local_compositional_average_integrals[c])+local_compositional_average_integrals[c];
+                 //     std::cout << "C after"<< t_tmp[j]<<std::endl;
+                      vector(local_dof_indices[support_point_index])=t_tmp[j];
+                    }
+              min_composition=t_tmp[0];
+              max_composition=t_tmp[0];
+              for (unsigned int j=0; j<finite_element.base_element(introspection.base_elements.compositional_fields).dofs_per_cell; ++j)
+              {
+                min_composition = std::min<double> (min_composition,t_tmp[j]);
+                max_composition = std::max<double> (max_composition,t_tmp[j]);
+              }
+/*
               IndexSet range = vector.block(introspection.block_indices.compositional_fields[c]).locally_owned_elements();
               std::vector<double> t_tmp(range.n_elements());
+              std::cout << "cell #dof "<< range.n_elements()<<std::endl;
               for (unsigned int i=0; i<range.n_elements(); ++i)
               {
                 const unsigned int idx = range.nth_index_in_set(i);
@@ -1012,8 +1036,8 @@ namespace aspect
                 max_composition = std::max<double> (max_composition,
                     t_tmp[j]);
               }
-
-              std::cout << "local max/min after limiter"<< min_composition<<max_composition<<std::endl;
+*/
+             // std::cout << "local max/min after limiter"<< min_composition<<max_composition<<std::endl;
 
 
 

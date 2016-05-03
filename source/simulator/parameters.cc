@@ -611,6 +611,11 @@ namespace aspect
                          "as opposed to continuous. This then requires the assembly of face terms "
                          "between cells, and weak imposition of boundary terms for the composition "
                          "field via the discontinuous Galerkin method.");
+      prm.declare_entry ("Use limiter for discontinuous solution", "false",
+                         Patterns::Bool (),
+                         "Whether to apply the limiter as a postprocess after obtain the discontinous solution "
+                         );
+
       prm.enter_subsection ("Stabilization parameters");
       {
         prm.declare_entry ("Use artificial viscosity smoothing", "false",
@@ -930,6 +935,8 @@ namespace aspect
         = prm.get_bool("Use discontinuous temperature discretization");
       use_discontinuous_composition_discretization
         = prm.get_bool("Use discontinuous composition discretization");
+      use_limiter_for_discontinuous_solution
+        = prm.get_bool("Use limiter for discontinuous solution");
       prm.enter_subsection ("Stabilization parameters");
       {
         use_artificial_viscosity_smoothing  = prm.get_bool ("Use artificial viscosity smoothing");

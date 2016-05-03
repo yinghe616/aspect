@@ -271,6 +271,7 @@ namespace aspect
     bool                           use_locally_conservative_discretization;
     bool                           use_discontinuous_temperature_discretization;
     bool                           use_discontinuous_composition_discretization;
+    bool                           use_limiter_for_discontinuous_solution;
     unsigned int                   temperature_degree;
     unsigned int                   composition_degree;
     std::string                    pressure_normalization;

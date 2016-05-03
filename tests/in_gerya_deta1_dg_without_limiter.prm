@@ -7,7 +7,7 @@ set End time                               = 20e26
 #set Use years in output instead of seconds = true
 set Use years in output instead of seconds = false
 set CFL number                             = .5
-set Output directory                       = gerya_deta1_dg_with_limiter
+set Output directory                       = gerya_deta1_dg_without_limiter
 
 subsection Geometry model
   set Model name = box
@@ -107,7 +107,7 @@ end
 subsection Discretization
 #  set Use discontinuous temperature discretization = false
   set Use discontinuous composition discretization = true
-  set Use limiter for discontinuous solution       = true
+  set Use limiter for discontinuous solution       = false
 end
 
 subsection Discretization

@@ -162,6 +162,7 @@ namespace aspect
     n_components (FEVariableCollection<dim>::n_components()),
     use_discontinuous_temperature_discretization (parameters.use_discontinuous_temperature_discretization),
     use_discontinuous_composition_discretization (parameters.use_discontinuous_composition_discretization),
+    use_limiter_for_discontinuous_solution (parameters.use_limiter_for_discontinuous_solution),
     component_indices (internal::setup_component_indices<dim>(*this)),
     n_blocks(FEVariableCollection<dim>::n_blocks()),
     block_indices (internal::setup_blocks<dim>(*this)),
