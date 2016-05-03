@@ -6,8 +6,8 @@ set Start time                             = 0
 set End time                               = 20e26
 #set Use years in output instead of seconds = true
 set Use years in output instead of seconds = false
-set CFL number                             = 1.0
-set Output directory                       = gerya_deta1_dg_without_limiter
+set CFL number                             = .5
+set Output directory                       = gerya_deta1_dg_with_limiter
 
 subsection Geometry model
   set Model name = box

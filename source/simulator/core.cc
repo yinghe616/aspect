@@ -1691,10 +1691,13 @@ namespace aspect
               solve_advection(AdvectionField::composition(c));
             }
 
+          apply_limiter_to_dg_solutions(solution);//FIXME
+          
           for (unsigned int c=0; c<parameters.n_compositional_fields; ++c)
             current_linearization_point.block(introspection.block_indices.compositional_fields[c])
               = solution.block(introspection.block_indices.compositional_fields[c]);
 
+          
           // the Stokes matrix depends on the viscosity. if the viscosity
           // depends on other solution variables, then after we need to
           // update the Stokes matrix in every time step and so need to set

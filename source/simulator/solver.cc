@@ -451,6 +451,7 @@ namespace aspect
     current_constraints.distribute (distributed_solution);
     solution.block(block_idx) = distributed_solution.block(block_idx);
 
+
     // print number of iterations and also record it in the
     // statistics file
     pcout << solver_control.last_step()
