@@ -803,7 +803,8 @@ namespace aspect
        */
       void denormalize_pressure(LinearAlgebra::BlockVector &vector);
 
-
+//FIXME apply the limiter to dg solutions
+      void apply_limiter_to_dg_solutions(LinearAlgebra::BlockVector &vector);
       /**
        * Interpolate the given function onto the velocity FE space and write
        * it into the given vector.
