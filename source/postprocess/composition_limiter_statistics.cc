@@ -123,6 +123,7 @@ namespace aspect
                 t_tmp[i]=this->get_solution().block(this->introspection().block_indices.compositional_fields[c])(idx);
                 std::cout << "C before "<< t_tmp[i]<<std::endl;
                 t_tmp[i]=theta_T*(t_tmp[i]-local_compositional_average_integrals[c])+local_compositional_average_integrals[c];
+                //(const_cast<> (this))->get_solution().block(this->introspection().block_indices.compositional_fields[c])(idx)=t_tmp[i];
                 std::cout << "C after"<< t_tmp[i]<<std::endl;
               }
             min_composition=t_tmp[0];
