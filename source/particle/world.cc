@@ -1,22 +1,22 @@
 /*
- Copyright (C) 2015 by the authors of the ASPECT code.
+  Copyright (C) 2015 - 2016 by the authors of the ASPECT code.
 
- This file is part of ASPECT.
+  This file is part of ASPECT.
 
- ASPECT is free software; you can redistribute it and/or modify
- it under the terms of the GNU General Public License as published by
- the Free Software Foundation; either version 2, or (at your option)
- any later version.
+  ASPECT is free software; you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation; either version 2, or (at your option)
+  any later version.
 
- ASPECT is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- GNU General Public License for more details.
+  ASPECT is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
 
- You should have received a copy of the GNU General Public License
- along with ASPECT; see the file doc/COPYING.  If not see
- <http://www.gnu.org/licenses/>.
- */
+  You should have received a copy of the GNU General Public License
+  along with ASPECT; see the file doc/COPYING.  If not see
+  <http://www.gnu.org/licenses/>.
+*/
 
 #include <aspect/particle/world.h>
 #include <aspect/global.h>
@@ -1206,9 +1206,9 @@ namespace aspect
                              "of particles. It will be checked and enforced after mesh "
                              "refinement and after particle movement. "
                              "If there are "
-                             "n_number_of_particles < min_particles_per_cell "
+                             "\\texttt{n\\_number\\_of\\_particles} $<$ \\texttt{min\\_particles\\_per\\_cell} "
                              "particles in one cell then "
-                             "min_particles_per_cell - n_number_of_particles "
+                             "\\texttt{min\\_particles\\_per\\_cell} - \\texttt{n\\_number\\_of\\_particles} "
                              "particles are generated and randomly placed in "
                              "this cell. If the particles carry properties the "
                              "individual property plugins control how the "
@@ -1220,9 +1220,9 @@ namespace aspect
                              "the whole model. It will be checked and enforced after mesh "
                              "refinement, after MPI transfer of particles and after particle "
                              "movement. If there are "
-                             "n_number_of_particles > max_particles_per_cell "
+                             "\\texttt{n\\_number\\_of\\_particles} $>$ \\texttt{max\\_particles\\_per\\_cell} "
                              "particles in one cell then "
-                             "n_number_of_particles - max_particles_per_cell "
+                             "\\texttt{n\\_number\\_of\\_particles} - \\texttt{max\\_particles\\_per\\_cell} "
                              "particles in this cell are randomly chosen and destroyed.");
           prm.declare_entry ("Tracer weight", "10",
                              Patterns::Integer (0),
