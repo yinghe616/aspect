@@ -1697,7 +1697,6 @@ namespace aspect
             current_linearization_point.block(introspection.block_indices.compositional_fields[c])
               = solution.block(introspection.block_indices.compositional_fields[c]);
 
-          
           // the Stokes matrix depends on the viscosity. if the viscosity
           // depends on other solution variables, then after we need to
           // update the Stokes matrix in every time step and so need to set
