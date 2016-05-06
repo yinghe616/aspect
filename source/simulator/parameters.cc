@@ -614,7 +614,7 @@ namespace aspect
       prm.declare_entry ("Use limiter for discontinuous solution", "false",
                          Patterns::Bool (),
                          "Whether to apply the limiter as a postprocess after obtain the discontinous solution "
-                         );
+                        );
 
       prm.enter_subsection ("Stabilization parameters");
       {

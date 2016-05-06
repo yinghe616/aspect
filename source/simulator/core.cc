@@ -1692,14 +1692,15 @@ namespace aspect
             }
 
           if (
-              parameters.use_discontinuous_composition_discretization
-              &&
-              parameters.use_limiter_for_discontinuous_solution
-              )
-             {
-                pcout << " start to apply the limiter to the discontinuous solution "<< std::endl;
-                apply_limiter_to_dg_solutions(solution);//FIXME
-             }
+            parameters.use_discontinuous_composition_discretization
+            &&
+            parameters.use_limiter_for_discontinuous_solution
+          )
+            {
+              pcout << " start to apply the limiter to the discontinuous solution "<< std::endl;
+              apply_limiter_to_dg_solutions(solution);//FIXME
+            }
+
           for (unsigned int c=0; c<parameters.n_compositional_fields; ++c)
             current_linearization_point.block(introspection.block_indices.compositional_fields[c])
               = solution.block(introspection.block_indices.compositional_fields[c]);

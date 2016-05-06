@@ -6,8 +6,8 @@ set Dimension                              = 2
 set Start time                             = 0
 set End time                               = 10
 set Use years in output instead of seconds = false
-set Output directory                       = dg_comp
 
+set Output directory                       = dg_comp_limiter
 
 subsection Geometry model
   set Model name = box
@@ -82,6 +82,8 @@ subsection Discretization
   set Use discontinuous temperature discretization = false
 
   set Use discontinuous composition discretization = true
+  
+  set Use limiter for discontinuous solution       = true
 end
 
 subsection Postprocess
