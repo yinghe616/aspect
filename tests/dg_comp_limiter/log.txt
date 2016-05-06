@@ -1,0 +1,2241 @@
+-----------------------------------------------------------------------------
+-- This is ASPECT, the Advanced Solver for Problems in Earth's ConvecTion.
+--     . version 1.4.0-pre
+--     . running in DEBUG mode
+--     . running with 1 MPI process
+--     . using Trilinos
+-----------------------------------------------------------------------------
+
+Number of active cells: 16 (on 3 levels)
+Number of degrees of freedom: 556 (162+25+81+144+144)
+
+*** Timestep 0:  t=0 seconds
+   Solving temperature system... 0 iterations.
+   Solving C_1 system ... 0 iterations.
+   Solving C_2 system ... 0 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+Number of active cells: 40 (on 4 levels)
+Number of degrees of freedom: 1,354 (386+55+193+360+360)
+
+*** Timestep 0:  t=0 seconds
+   Solving temperature system... 0 iterations.
+   Solving C_1 system ... 0 iterations.
+   Solving C_2 system ... 0 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.5 K, 1 K
+     Compositions min/max/mass: 0/0.9427/0.4167 // 0/1/0.4583
+
+*** Timestep 1:  t=0.0625 seconds
+   Solving temperature system... 5 iterations.
+   Solving C_1 system ... 3 iterations.
+   Solving C_2 system ... 4 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 12+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.4997 K, 1 K
+     Compositions min/max/mass: -0.001524/0.9566/0.4167 // -0.007593/1/0.4583
+
+*** Timestep 2:  t=0.125 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 3 iterations.
+   Solving C_2 system ... 3 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.4995 K, 1 K
+     Compositions min/max/mass: -0.005197/0.9694/0.4167 // -0.03356/1/0.4583
+
+Number of active cells: 64 (on 4 levels)
+Number of degrees of freedom: 2,100 (578+81+289+576+576)
+
+*** Timestep 3:  t=0.1875 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 3 iterations.
+   Solving C_2 system ... 4 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.4991 K, 1 K
+     Compositions min/max/mass: -0.009775/1.004/0.4167 // -0.007154/1/0.4582
+
+*** Timestep 4:  t=0.25 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 3 iterations.
+   Solving C_2 system ... 4 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.4985 K, 1 K
+     Compositions min/max/mass: -0.01317/1.005/0.4167 // -0.1132/1/0.4582
+
+Number of active cells: 64 (on 4 levels)
+Number of degrees of freedom: 2,100 (578+81+289+576+576)
+
+*** Timestep 5:  t=0.3125 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 3 iterations.
+   Solving C_2 system ... 4 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.4979 K, 1 K
+     Compositions min/max/mass: -0.01375/1.005/0.4167 // -0.008271/1.006/0.4581
+
+*** Timestep 6:  t=0.375 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 3 iterations.
+   Solving C_2 system ... 4 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.4971 K, 1 K
+     Compositions min/max/mass: -0.001469/1.004/0.4167 // -3.158e-05/1.025/0.458
+
+Number of active cells: 64 (on 4 levels)
+Number of degrees of freedom: 2,100 (578+81+289+576+576)
+
+*** Timestep 7:  t=0.4375 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 3 iterations.
+   Solving C_2 system ... 4 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.4963 K, 1 K
+     Compositions min/max/mass: -0.001966/1.004/0.4167 // -0.0003147/1.029/0.4582
+
+*** Timestep 8:  t=0.5 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 3 iterations.
+   Solving C_2 system ... 4 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.4956 K, 1 K
+     Compositions min/max/mass: -0.002154/1.003/0.4167 // -0.007509/1.005/0.4581
+
+Number of active cells: 64 (on 4 levels)
+Number of degrees of freedom: 2,100 (578+81+289+576+576)
+
+*** Timestep 9:  t=0.5625 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 3 iterations.
+   Solving C_2 system ... 4 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.4947 K, 1 K
+     Compositions min/max/mass: -0.002063/1.003/0.4167 // -0.03352/1/0.458
+
+*** Timestep 10:  t=0.625 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 3 iterations.
+   Solving C_2 system ... 4 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.494 K, 1 K
+     Compositions min/max/mass: -0.002636/1.01/0.4167 // -0.01383/1.016/0.4582
+
+Number of active cells: 64 (on 4 levels)
+Number of degrees of freedom: 2,100 (578+81+289+576+576)
+
+*** Timestep 11:  t=0.6875 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 3 iterations.
+   Solving C_2 system ... 4 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.4933 K, 1 K
+     Compositions min/max/mass: -0.02146/1.004/0.4167 // -0.003511/1.023/0.4584
+
+*** Timestep 12:  t=0.75 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 3 iterations.
+   Solving C_2 system ... 4 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.4928 K, 1 K
+     Compositions min/max/mass: -0.01537/1.002/0.4167 // -0.001186/1.009/0.4584
+
+Number of active cells: 64 (on 4 levels)
+Number of degrees of freedom: 2,100 (578+81+289+576+576)
+
+*** Timestep 13:  t=0.8125 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 3 iterations.
+   Solving C_2 system ... 4 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 10+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.4923 K, 1 K
+     Compositions min/max/mass: -0.002639/1.002/0.4167 // -0.004302/1.007/0.4584
+
+*** Timestep 14:  t=0.875 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 3 iterations.
+   Solving C_2 system ... 4 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 9+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.492 K, 1 K
+     Compositions min/max/mass: -0.002639/1.002/0.4167 // -0.00733/1.021/0.4584
+
+Number of active cells: 64 (on 4 levels)
+Number of degrees of freedom: 2,100 (578+81+289+576+576)
+
+*** Timestep 15:  t=0.9375 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 3 iterations.
+   Solving C_2 system ... 4 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 8+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.4917 K, 1 K
+     Compositions min/max/mass: -0.00265/1.002/0.4167 // -0.01269/1.002/0.4584
+
+*** Timestep 16:  t=1 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 3 iterations.
+   Solving C_2 system ... 4 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 9+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.4915 K, 1 K
+     Compositions min/max/mass: -0.007543/1.002/0.4167 // -0.01587/1.029/0.4583
+
+Number of active cells: 64 (on 4 levels)
+Number of degrees of freedom: 2,100 (578+81+289+576+576)
+
+*** Timestep 17:  t=1.0625 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 3 iterations.
+   Solving C_2 system ... 4 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 9+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.4912 K, 1 K
+     Compositions min/max/mass: -0.003129/1.001/0.4167 // -0.0121/1.058/0.4583
+
+*** Timestep 18:  t=1.125 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 3 iterations.
+   Solving C_2 system ... 4 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 9+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.4909 K, 1 K
+     Compositions min/max/mass: -0.006913/1.001/0.4167 // -0.01327/1.019/0.4584
+
+Number of active cells: 64 (on 4 levels)
+Number of degrees of freedom: 2,100 (578+81+289+576+576)
+
+*** Timestep 19:  t=1.1875 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 3 iterations.
+   Solving C_2 system ... 4 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 9+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.4904 K, 1 K
+     Compositions min/max/mass: -0.01337/1.001/0.4167 // -0.01825/1.023/0.4584
+
+*** Timestep 20:  t=1.25 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 3 iterations.
+   Solving C_2 system ... 4 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 9+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.4898 K, 1 K
+     Compositions min/max/mass: -0.01255/1/0.4167 // -0.01767/1.022/0.4584
+
+Number of active cells: 64 (on 4 levels)
+Number of degrees of freedom: 2,100 (578+81+289+576+576)
+
+*** Timestep 21:  t=1.3125 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 3 iterations.
+   Solving C_2 system ... 4 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 9+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.489 K, 1 K
+     Compositions min/max/mass: -0.006834/1/0.4167 // -0.01735/1.061/0.4584
+
+*** Timestep 22:  t=1.375 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 3 iterations.
+   Solving C_2 system ... 4 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.4882 K, 1 K
+     Compositions min/max/mass: -0.00688/1/0.4167 // -0.01726/1.039/0.4585
+
+Number of active cells: 64 (on 4 levels)
+Number of degrees of freedom: 2,100 (578+81+289+576+576)
+
+*** Timestep 23:  t=1.4375 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 4 iterations.
+   Solving C_2 system ... 4 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.4873 K, 1 K
+     Compositions min/max/mass: -0.002057/1/0.4167 // -0.01723/1.015/0.4582
+
+*** Timestep 24:  t=1.5 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 3 iterations.
+   Solving C_2 system ... 4 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.4863 K, 1 K
+     Compositions min/max/mass: -0.006004/1/0.4167 // -0.01721/1.013/0.4581
+
+Number of active cells: 64 (on 4 levels)
+Number of degrees of freedom: 2,100 (578+81+289+576+576)
+
+*** Timestep 25:  t=1.5625 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 4 iterations.
+   Solving C_2 system ... 4 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.4852 K, 1 K
+     Compositions min/max/mass: -0.004323/1/0.4167 // -0.01709/1.011/0.4583
+
+*** Timestep 26:  t=1.625 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 4 iterations.
+   Solving C_2 system ... 4 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.4838 K, 1 K
+     Compositions min/max/mass: -0.002604/1/0.4167 // -0.02347/1.009/0.4585
+
+Number of active cells: 64 (on 4 levels)
+Number of degrees of freedom: 2,100 (578+81+289+576+576)
+
+*** Timestep 27:  t=1.6875 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 4 iterations.
+   Solving C_2 system ... 4 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.4825 K, 1 K
+     Compositions min/max/mass: -0.0005066/1/0.4167 // -0.02605/1.008/0.4581
+
+*** Timestep 28:  t=1.75 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 4 iterations.
+   Solving C_2 system ... 4 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.481 K, 1 K
+     Compositions min/max/mass: -0.004566/1/0.4167 // -0.02679/1.05/0.4582
+
+Number of active cells: 64 (on 4 levels)
+Number of degrees of freedom: 2,100 (578+81+289+576+576)
+
+*** Timestep 29:  t=1.8125 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 4 iterations.
+   Solving C_2 system ... 4 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.4793 K, 1 K
+     Compositions min/max/mass: -0.01026/1.001/0.4167 // -0.03072/1.068/0.4583
+
+*** Timestep 30:  t=1.875 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 4 iterations.
+   Solving C_2 system ... 3 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.4779 K, 1 K
+     Compositions min/max/mass: -0.0005302/1.001/0.4167 // -0.0269/1.058/0.4581
+
+Number of active cells: 64 (on 4 levels)
+Number of degrees of freedom: 2,100 (578+81+289+576+576)
+
+*** Timestep 31:  t=1.9375 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 4 iterations.
+   Solving C_2 system ... 3 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.4762 K, 1 K
+     Compositions min/max/mass: -0.001349/1.001/0.4167 // -0.01811/1.041/0.4583
+
+*** Timestep 32:  t=2 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 4 iterations.
+   Solving C_2 system ... 3 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.4747 K, 1 K
+     Compositions min/max/mass: -4.033e-05/1/0.4167 // -0.02898/1.028/0.4581
+
+Number of active cells: 64 (on 4 levels)
+Number of degrees of freedom: 2,100 (578+81+289+576+576)
+
+*** Timestep 33:  t=2.0625 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 3 iterations.
+   Solving C_2 system ... 3 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.473 K, 1 K
+     Compositions min/max/mass: -1.612e-05/1/0.4167 // -0.005361/1.018/0.4579
+
+*** Timestep 34:  t=2.125 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 4 iterations.
+   Solving C_2 system ... 3 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.4714 K, 1 K
+     Compositions min/max/mass: -0.01273/1/0.4167 // -0.004932/1.009/0.4581
+
+Number of active cells: 64 (on 4 levels)
+Number of degrees of freedom: 2,100 (578+81+289+576+576)
+
+*** Timestep 35:  t=2.1875 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 4 iterations.
+   Solving C_2 system ... 4 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.4698 K, 1 K
+     Compositions min/max/mass: -0.01244/1/0.4167 // -0.02117/1.005/0.4579
+
+*** Timestep 36:  t=2.25 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 4 iterations.
+   Solving C_2 system ... 3 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.468 K, 1 K
+     Compositions min/max/mass: -0.003829/1.001/0.4167 // -0.00327/1.004/0.458
+
+Number of active cells: 64 (on 4 levels)
+Number of degrees of freedom: 2,100 (578+81+289+576+576)
+
+*** Timestep 37:  t=2.3125 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 4 iterations.
+   Solving C_2 system ... 4 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.4661 K, 1 K
+     Compositions min/max/mass: -0.00279/1/0.4167 // -0.006588/1.002/0.4578
+
+*** Timestep 38:  t=2.375 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 4 iterations.
+   Solving C_2 system ... 3 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.464 K, 1 K
+     Compositions min/max/mass: -1.471e-05/1.017/0.4167 // -0.005989/1.004/0.4577
+
+Number of active cells: 64 (on 4 levels)
+Number of degrees of freedom: 2,100 (578+81+289+576+576)
+
+*** Timestep 39:  t=2.4375 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 4 iterations.
+   Solving C_2 system ... 3 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.462 K, 1 K
+     Compositions min/max/mass: -0.01886/1.033/0.4168 // -0.0132/0.999/0.4578
+
+*** Timestep 40:  t=2.5 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 4 iterations.
+   Solving C_2 system ... 4 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.4602 K, 1 K
+     Compositions min/max/mass: -0.05525/1.025/0.4168 // -0.01263/0.9991/0.4575
+
+Number of active cells: 64 (on 4 levels)
+Number of degrees of freedom: 2,100 (578+81+289+576+576)
+
+*** Timestep 41:  t=2.5625 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 4 iterations.
+   Solving C_2 system ... 3 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.4587 K, 1 K
+     Compositions min/max/mass: -0.0224/1.007/0.4168 // -0.0002744/1.005/0.4574
+
+*** Timestep 42:  t=2.625 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 4 iterations.
+   Solving C_2 system ... 3 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.4573 K, 1 K
+     Compositions min/max/mass: -0.008643/1/0.4168 // -0.01929/0.9998/0.4578
+
+Number of active cells: 64 (on 4 levels)
+Number of degrees of freedom: 2,100 (578+81+289+576+576)
+
+*** Timestep 43:  t=2.6875 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 4 iterations.
+   Solving C_2 system ... 3 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.4561 K, 1 K
+     Compositions min/max/mass: -0.003802/1/0.4168 // -0.04858/1/0.4582
+
+*** Timestep 44:  t=2.75 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 4 iterations.
+   Solving C_2 system ... 3 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.4553 K, 1 K
+     Compositions min/max/mass: -0.001279/1/0.4168 // -0.04693/1/0.4582
+
+Number of active cells: 64 (on 4 levels)
+Number of degrees of freedom: 2,100 (578+81+289+576+576)
+
+*** Timestep 45:  t=2.8125 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 4 iterations.
+   Solving C_2 system ... 3 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 8+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.4545 K, 1 K
+     Compositions min/max/mass: -0.0006417/1/0.4168 // -0.03878/1.004/0.4582
+
+*** Timestep 46:  t=2.875 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 3 iterations.
+   Solving C_2 system ... 3 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 8+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.454 K, 1 K
+     Compositions min/max/mass: -0.04488/1/0.4168 // -0.02139/0.9999/0.4582
+
+Number of active cells: 64 (on 4 levels)
+Number of degrees of freedom: 2,100 (578+81+289+576+576)
+
+*** Timestep 47:  t=2.9375 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 3 iterations.
+   Solving C_2 system ... 3 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 8+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.4535 K, 1 K
+     Compositions min/max/mass: -0.05597/1.002/0.4168 // -0.008893/1/0.4583
+
+*** Timestep 48:  t=3 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 3 iterations.
+   Solving C_2 system ... 3 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 8+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.453 K, 1 K
+     Compositions min/max/mass: -0.03037/1.011/0.4168 // -0.008335/0.9999/0.4583
+
+Number of active cells: 64 (on 4 levels)
+Number of degrees of freedom: 2,100 (578+81+289+576+576)
+
+*** Timestep 49:  t=3.0625 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 4 iterations.
+   Solving C_2 system ... 3 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 8+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.4526 K, 1 K
+     Compositions min/max/mass: -0.01175/1.005/0.4168 // -0.01551/1/0.4583
+
+*** Timestep 50:  t=3.125 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 4 iterations.
+   Solving C_2 system ... 3 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 8+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.4523 K, 1 K
+     Compositions min/max/mass: -0.007453/1.003/0.4168 // -0.00652/1/0.4584
+
+Number of active cells: 64 (on 4 levels)
+Number of degrees of freedom: 2,100 (578+81+289+576+576)
+
+*** Timestep 51:  t=3.1875 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 4 iterations.
+   Solving C_2 system ... 3 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 8+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.4519 K, 1 K
+     Compositions min/max/mass: -0.005126/1.003/0.4168 // -0.004887/1/0.4584
+
+*** Timestep 52:  t=3.25 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 4 iterations.
+   Solving C_2 system ... 3 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 8+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.4516 K, 1 K
+     Compositions min/max/mass: -0.001145/1.001/0.4168 // -0.004801/0.9995/0.4584
+
+Number of active cells: 64 (on 4 levels)
+Number of degrees of freedom: 2,100 (578+81+289+576+576)
+
+*** Timestep 53:  t=3.3125 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 4 iterations.
+   Solving C_2 system ... 3 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 8+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.4513 K, 1 K
+     Compositions min/max/mass: -0.001713/1/0.4168 // -0.006321/0.9997/0.4584
+
+*** Timestep 54:  t=3.375 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 4 iterations.
+   Solving C_2 system ... 3 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.4509 K, 1 K
+     Compositions min/max/mass: -0.001691/1.003/0.4168 // -0.007377/0.9999/0.4584
+
+Number of active cells: 64 (on 4 levels)
+Number of degrees of freedom: 2,100 (578+81+289+576+576)
+
+*** Timestep 55:  t=3.4375 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 4 iterations.
+   Solving C_2 system ... 3 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.4506 K, 1 K
+     Compositions min/max/mass: -0.01199/1.011/0.4168 // -0.007724/1/0.4585
+
+*** Timestep 56:  t=3.5 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 4 iterations.
+   Solving C_2 system ... 3 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.4503 K, 1 K
+     Compositions min/max/mass: -0.009067/1.023/0.4168 // -0.007539/1.001/0.4586
+
+Number of active cells: 64 (on 4 levels)
+Number of degrees of freedom: 2,100 (578+81+289+576+576)
+
+*** Timestep 57:  t=3.5625 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 3 iterations.
+   Solving C_2 system ... 3 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.45 K, 1 K
+     Compositions min/max/mass: -0.0002562/1.025/0.4168 // -0.009258/1.005/0.4585
+
+*** Timestep 58:  t=3.625 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 4 iterations.
+   Solving C_2 system ... 3 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.4497 K, 1 K
+     Compositions min/max/mass: -0.0114/1.016/0.4168 // -0.009732/1/0.4585
+
+Number of active cells: 64 (on 4 levels)
+Number of degrees of freedom: 2,100 (578+81+289+576+576)
+
+*** Timestep 59:  t=3.6875 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 4 iterations.
+   Solving C_2 system ... 3 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.4494 K, 1 K
+     Compositions min/max/mass: -0.01717/1.012/0.4168 // -0.009433/0.9994/0.4585
+
+*** Timestep 60:  t=3.75 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 4 iterations.
+   Solving C_2 system ... 4 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.449 K, 1 K
+     Compositions min/max/mass: -0.005113/1.012/0.4168 // -0.01302/1/0.4585
+
+Number of active cells: 64 (on 4 levels)
+Number of degrees of freedom: 2,100 (578+81+289+576+576)
+
+*** Timestep 61:  t=3.8125 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 4 iterations.
+   Solving C_2 system ... 3 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.4485 K, 1 K
+     Compositions min/max/mass: -0.0001456/1.01/0.4168 // -0.01026/1/0.4585
+
+*** Timestep 62:  t=3.875 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 3 iterations.
+   Solving C_2 system ... 3 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.4481 K, 1 K
+     Compositions min/max/mass: -0.0001007/1.009/0.4168 // -0.008207/1.008/0.4585
+
+Number of active cells: 64 (on 4 levels)
+Number of degrees of freedom: 2,100 (578+81+289+576+576)
+
+*** Timestep 63:  t=3.9375 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 3 iterations.
+   Solving C_2 system ... 3 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.4475 K, 1 K
+     Compositions min/max/mass: -2.97e-05/1.008/0.4168 // -0.0002689/1.011/0.4585
+
+*** Timestep 64:  t=4 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 3 iterations.
+   Solving C_2 system ... 3 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.4468 K, 1 K
+     Compositions min/max/mass: 0/1.003/0.4168 // -0.003669/1.009/0.4585
+
+Number of active cells: 64 (on 4 levels)
+Number of degrees of freedom: 2,100 (578+81+289+576+576)
+
+*** Timestep 65:  t=4.0625 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 3 iterations.
+   Solving C_2 system ... 3 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.4459 K, 1 K
+     Compositions min/max/mass: -0.0003586/1/0.4168 // -0.001296/1.007/0.4585
+
+*** Timestep 66:  t=4.125 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 3 iterations.
+   Solving C_2 system ... 3 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.4451 K, 1 K
+     Compositions min/max/mass: -0.004968/1.002/0.4168 // -0.001512/1.026/0.4586
+
+Number of active cells: 64 (on 4 levels)
+Number of degrees of freedom: 2,100 (578+81+289+576+576)
+
+*** Timestep 67:  t=4.1875 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 3 iterations.
+   Solving C_2 system ... 4 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.4442 K, 1 K
+     Compositions min/max/mass: -0.0009118/1/0.4168 // -0.0006549/1.004/0.4586
+
+*** Timestep 68:  t=4.25 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 3 iterations.
+   Solving C_2 system ... 4 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.443 K, 1 K
+     Compositions min/max/mass: -0.002232/1/0.4168 // -0.0006796/1.009/0.4586
+
+Number of active cells: 64 (on 4 levels)
+Number of degrees of freedom: 2,100 (578+81+289+576+576)
+
+*** Timestep 69:  t=4.3125 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 3 iterations.
+   Solving C_2 system ... 4 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.4417 K, 1 K
+     Compositions min/max/mass: -0.003983/1.004/0.4168 // -0.0001212/1.01/0.4586
+
+*** Timestep 70:  t=4.375 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 3 iterations.
+   Solving C_2 system ... 4 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.4403 K, 1 K
+     Compositions min/max/mass: -0.0034/1.036/0.4168 // -0.000365/1.034/0.4585
+
+Number of active cells: 64 (on 4 levels)
+Number of degrees of freedom: 2,100 (578+81+289+576+576)
+
+*** Timestep 71:  t=4.4375 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 3 iterations.
+   Solving C_2 system ... 4 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.4391 K, 1 K
+     Compositions min/max/mass: -0.0004308/1.029/0.4168 // -0.0001306/1.018/0.4587
+
+*** Timestep 72:  t=4.5 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 3 iterations.
+   Solving C_2 system ... 4 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.438 K, 1 K
+     Compositions min/max/mass: -0.03037/1.011/0.4168 // -9.539e-05/1.006/0.4587
+
+Number of active cells: 64 (on 4 levels)
+Number of degrees of freedom: 2,100 (578+81+289+576+576)
+
+*** Timestep 73:  t=4.5625 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 3 iterations.
+   Solving C_2 system ... 4 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.4369 K, 1 K
+     Compositions min/max/mass: -0.05265/1.002/0.4168 // -0.0008372/1.009/0.4588
+
+*** Timestep 74:  t=4.625 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 3 iterations.
+   Solving C_2 system ... 4 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.4358 K, 1 K
+     Compositions min/max/mass: -0.03105/1/0.4168 // -0.001338/1.008/0.459
+
+Number of active cells: 64 (on 4 levels)
+Number of degrees of freedom: 2,100 (578+81+289+576+576)
+
+*** Timestep 75:  t=4.6875 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 3 iterations.
+   Solving C_2 system ... 4 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.4349 K, 1 K
+     Compositions min/max/mass: -0.01322/1/0.4168 // -0.004362/1.015/0.4592
+
+*** Timestep 76:  t=4.75 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 3 iterations.
+   Solving C_2 system ... 4 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.4343 K, 1 K
+     Compositions min/max/mass: -0.005006/1.02/0.4168 // -0.003652/1.064/0.4591
+
+Number of active cells: 64 (on 4 levels)
+Number of degrees of freedom: 2,100 (578+81+289+576+576)
+
+*** Timestep 77:  t=4.8125 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 3 iterations.
+   Solving C_2 system ... 4 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 8+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.4337 K, 1 K
+     Compositions min/max/mass: -0.00123/1.016/0.4168 // -0.00441/1.057/0.4591
+
+*** Timestep 78:  t=4.875 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 3 iterations.
+   Solving C_2 system ... 4 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 8+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.4333 K, 1 K
+     Compositions min/max/mass: -1.216e-05/1.005/0.4168 // -0.009826/1.029/0.4591
+
+Number of active cells: 64 (on 4 levels)
+Number of degrees of freedom: 2,100 (578+81+289+576+576)
+
+*** Timestep 79:  t=4.9375 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 3 iterations.
+   Solving C_2 system ... 4 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 8+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.433 K, 1 K
+     Compositions min/max/mass: -2.599e-06/1.001/0.4168 // -0.009878/1.009/0.4591
+
+*** Timestep 80:  t=5 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 3 iterations.
+   Solving C_2 system ... 4 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 8+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.4328 K, 1 K
+     Compositions min/max/mass: -1.357e-05/1.004/0.4168 // -0.008806/1.006/0.4592
+
+Number of active cells: 64 (on 4 levels)
+Number of degrees of freedom: 2,100 (578+81+289+576+576)
+
+*** Timestep 81:  t=5.0625 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 3 iterations.
+   Solving C_2 system ... 4 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 8+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.4328 K, 1 K
+     Compositions min/max/mass: -0.001344/1.002/0.4168 // -0.006561/1.004/0.4592
+
+*** Timestep 82:  t=5.125 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 3 iterations.
+   Solving C_2 system ... 4 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 8+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.4328 K, 1 K
+     Compositions min/max/mass: -0.007471/1.003/0.4168 // -0.008141/1.002/0.4592
+
+Number of active cells: 64 (on 4 levels)
+Number of degrees of freedom: 2,100 (578+81+289+576+576)
+
+*** Timestep 83:  t=5.1875 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 3 iterations.
+   Solving C_2 system ... 4 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 8+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.433 K, 1 K
+     Compositions min/max/mass: -0.008841/1.002/0.4168 // -0.009239/1.001/0.4592
+
+*** Timestep 84:  t=5.25 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 3 iterations.
+   Solving C_2 system ... 4 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 8+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.4332 K, 1 K
+     Compositions min/max/mass: -0.008389/1.004/0.4168 // -0.009104/1/0.4593
+
+Number of active cells: 64 (on 4 levels)
+Number of degrees of freedom: 2,100 (578+81+289+576+576)
+
+*** Timestep 85:  t=5.3125 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 3 iterations.
+   Solving C_2 system ... 4 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 8+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.4334 K, 1 K
+     Compositions min/max/mass: -0.006573/1.005/0.4168 // -0.008095/1.004/0.4593
+
+*** Timestep 86:  t=5.375 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 3 iterations.
+   Solving C_2 system ... 4 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.4337 K, 1 K
+     Compositions min/max/mass: -0.002931/1.004/0.4168 // -0.006744/1.043/0.4593
+
+Number of active cells: 64 (on 4 levels)
+Number of degrees of freedom: 2,100 (578+81+289+576+576)
+
+*** Timestep 87:  t=5.4375 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 3 iterations.
+   Solving C_2 system ... 4 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.434 K, 1 K
+     Compositions min/max/mass: -0.0009937/1.002/0.4168 // -0.006646/1.023/0.4593
+
+*** Timestep 88:  t=5.5 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 3 iterations.
+   Solving C_2 system ... 4 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.4343 K, 1 K
+     Compositions min/max/mass: -0.002276/1.006/0.4168 // -0.006855/1.009/0.4595
+
+Number of active cells: 64 (on 4 levels)
+Number of degrees of freedom: 2,100 (578+81+289+576+576)
+
+*** Timestep 89:  t=5.5625 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 3 iterations.
+   Solving C_2 system ... 4 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.4346 K, 1 K
+     Compositions min/max/mass: -0.003354/1.012/0.4168 // -0.007006/1.001/0.4595
+
+*** Timestep 90:  t=5.625 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 3 iterations.
+   Solving C_2 system ... 4 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.4349 K, 1 K
+     Compositions min/max/mass: -0.003381/1.015/0.4168 // -0.007119/0.9987/0.4596
+
+Number of active cells: 64 (on 4 levels)
+Number of degrees of freedom: 2,100 (578+81+289+576+576)
+
+*** Timestep 91:  t=5.6875 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 4 iterations.
+   Solving C_2 system ... 4 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.4351 K, 1 K
+     Compositions min/max/mass: -0.002958/1.009/0.4168 // -0.006434/1/0.4594
+
+*** Timestep 92:  t=5.75 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 3 iterations.
+   Solving C_2 system ... 4 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.435 K, 1 K
+     Compositions min/max/mass: -0.002577/0.9995/0.4168 // -0.005234/1.001/0.4594
+
+Number of active cells: 64 (on 4 levels)
+Number of degrees of freedom: 2,100 (578+81+289+576+576)
+
+*** Timestep 93:  t=5.8125 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 4 iterations.
+   Solving C_2 system ... 4 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.4348 K, 1 K
+     Compositions min/max/mass: -0.02487/0.9999/0.4168 // -0.01568/1.002/0.4595
+
+*** Timestep 94:  t=5.875 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 4 iterations.
+   Solving C_2 system ... 4 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.4345 K, 1 K
+     Compositions min/max/mass: -0.014/0.9993/0.4168 // -0.009535/1.002/0.4593
+
+Number of active cells: 64 (on 4 levels)
+Number of degrees of freedom: 2,100 (578+81+289+576+576)
+
+*** Timestep 95:  t=5.9375 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 4 iterations.
+   Solving C_2 system ... 3 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.4339 K, 1 K
+     Compositions min/max/mass: -0.01908/0.9999/0.4168 // -0.007701/1.002/0.4594
+
+*** Timestep 96:  t=6 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 4 iterations.
+   Solving C_2 system ... 4 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.433 K, 1 K
+     Compositions min/max/mass: -0.01245/1/0.4168 // 0/1.002/0.4593
+
+Number of active cells: 64 (on 4 levels)
+Number of degrees of freedom: 2,100 (578+81+289+576+576)
+
+*** Timestep 97:  t=6.0625 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 4 iterations.
+   Solving C_2 system ... 3 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.4317 K, 1 K
+     Compositions min/max/mass: -0.01633/1/0.4168 // 0/1.002/0.4593
+
+*** Timestep 98:  t=6.125 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 4 iterations.
+   Solving C_2 system ... 3 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.4305 K, 1 K
+     Compositions min/max/mass: -0.01672/1/0.4168 // -0.0001008/1.001/0.4594
+
+Number of active cells: 64 (on 4 levels)
+Number of degrees of freedom: 2,100 (578+81+289+576+576)
+
+*** Timestep 99:  t=6.1875 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 4 iterations.
+   Solving C_2 system ... 4 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.4291 K, 1 K
+     Compositions min/max/mass: -0.01283/1.001/0.4167 // -0.004119/1.001/0.4592
+
+*** Timestep 100:  t=6.25 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 4 iterations.
+   Solving C_2 system ... 3 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.4273 K, 1 K
+     Compositions min/max/mass: -0.04245/1.001/0.4167 // -0.007169/0.9997/0.4593
+
+Number of active cells: 64 (on 4 levels)
+Number of degrees of freedom: 2,100 (578+81+289+576+576)
+
+
+
++---------------------------------------------+------------+------------+
+| Total wallclock time elapsed since start    |      35.8s |            |
+|                                             |            |            |
+| Section                         | no. calls |  wall time | % of total |
++---------------------------------+-----------+------------+------------+
+| Assemble Stokes system          |       102 |      4.37s |        12% |
+| Assemble composition system     |       204 |        12s |        34% |
+| Assemble temperature system     |       102 |      2.99s |       8.3% |
+| Build Stokes preconditioner     |       102 |      4.83s |        13% |
+| Build composition preconditioner|       204 |     0.747s |       2.1% |
+| Build temperature preconditioner|       102 |     0.184s |      0.51% |
+| Solve Stokes system             |       102 |       1.6s |       4.5% |
+| Solve composition system        |       204 |     0.256s |      0.71% |
+| Solve temperature system        |       102 |     0.151s |      0.42% |
+| Initialization                  |         3 |    0.0571s |      0.16% |
+| Postprocessing                  |       101 |      1.55s |       4.3% |
+| Refine mesh structure, part 1   |        51 |      1.67s |       4.7% |
+| Refine mesh structure, part 2   |        51 |    0.0366s |       0.1% |
+| Setup dof systems               |        52 |       4.5s |        13% |
++---------------------------------+-----------+------------+------------+
+
+*** Timestep 101:  t=6.3125 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 4 iterations.
+   Solving C_2 system ... 4 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.4251 K, 1 K
+     Compositions min/max/mass: -0.04395/1.003/0.4167 // -0.007577/0.9941/0.4592
+
+*** Timestep 102:  t=6.375 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 4 iterations.
+   Solving C_2 system ... 3 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.4228 K, 1 K
+     Compositions min/max/mass: -0.02036/1.004/0.4168 // -0.003557/0.9936/0.4592
+
+Number of active cells: 64 (on 4 levels)
+Number of degrees of freedom: 2,100 (578+81+289+576+576)
+
+*** Timestep 103:  t=6.4375 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 4 iterations.
+   Solving C_2 system ... 4 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.4205 K, 1 K
+     Compositions min/max/mass: -0.01273/1.005/0.4168 // -0.001937/0.9966/0.4593
+
+*** Timestep 104:  t=6.5 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 4 iterations.
+   Solving C_2 system ... 4 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.4184 K, 1 K
+     Compositions min/max/mass: -0.009278/1.004/0.4168 // -0.002949/0.9969/0.4594
+
+Number of active cells: 64 (on 4 levels)
+Number of degrees of freedom: 2,100 (578+81+289+576+576)
+
+*** Timestep 105:  t=6.5625 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 4 iterations.
+   Solving C_2 system ... 4 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.4165 K, 1 K
+     Compositions min/max/mass: -0.0259/0.9998/0.4168 // -0.00328/0.9931/0.4595
+
+*** Timestep 106:  t=6.625 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 4 iterations.
+   Solving C_2 system ... 4 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.4147 K, 1 K
+     Compositions min/max/mass: -0.01708/1.004/0.4168 // -0.003824/0.9898/0.4596
+
+Number of active cells: 64 (on 4 levels)
+Number of degrees of freedom: 2,100 (578+81+289+576+576)
+
+*** Timestep 107:  t=6.6875 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 4 iterations.
+   Solving C_2 system ... 4 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.4131 K, 1 K
+     Compositions min/max/mass: -0.01536/1.005/0.4168 // -0.003997/0.9909/0.4596
+
+*** Timestep 108:  t=6.75 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 4 iterations.
+   Solving C_2 system ... 4 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.4118 K, 1 K
+     Compositions min/max/mass: -0.01605/1.005/0.4167 // -0.004317/0.9915/0.4596
+
+Number of active cells: 64 (on 4 levels)
+Number of degrees of freedom: 2,100 (578+81+289+576+576)
+
+*** Timestep 109:  t=6.8125 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 4 iterations.
+   Solving C_2 system ... 4 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 9+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.4108 K, 1 K
+     Compositions min/max/mass: -0.01617/1.001/0.4167 // -0.005234/0.9936/0.4597
+
+*** Timestep 110:  t=6.875 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 4 iterations.
+   Solving C_2 system ... 4 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 9+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.4099 K, 1 K
+     Compositions min/max/mass: -0.01603/0.9996/0.4167 // -0.02333/0.9915/0.4597
+
+Number of active cells: 64 (on 4 levels)
+Number of degrees of freedom: 2,100 (578+81+289+576+576)
+
+*** Timestep 111:  t=6.9375 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 4 iterations.
+   Solving C_2 system ... 4 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 9+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.4092 K, 1 K
+     Compositions min/max/mass: -0.02975/0.9992/0.4167 // -0.02261/0.9887/0.4597
+
+*** Timestep 112:  t=7 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 4 iterations.
+   Solving C_2 system ... 4 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 9+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.4086 K, 1 K
+     Compositions min/max/mass: -0.01549/0.999/0.4167 // -0.01987/0.9886/0.4597
+
+Number of active cells: 64 (on 4 levels)
+Number of degrees of freedom: 2,100 (578+81+289+576+576)
+
+*** Timestep 113:  t=7.0625 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 4 iterations.
+   Solving C_2 system ... 4 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 8+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.4082 K, 1 K
+     Compositions min/max/mass: -0.01521/1/0.4167 // -0.01473/0.9868/0.4597
+
+*** Timestep 114:  t=7.125 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 4 iterations.
+   Solving C_2 system ... 4 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 8+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.4079 K, 1 K
+     Compositions min/max/mass: -0.01491/1/0.4167 // -0.003335/0.9899/0.4597
+
+Number of active cells: 64 (on 4 levels)
+Number of degrees of freedom: 2,100 (578+81+289+576+576)
+
+*** Timestep 115:  t=7.1875 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 4 iterations.
+   Solving C_2 system ... 4 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 8+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.4077 K, 1 K
+     Compositions min/max/mass: -0.01459/1/0.4167 // -0.002087/0.9919/0.4597
+
+*** Timestep 116:  t=7.25 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 4 iterations.
+   Solving C_2 system ... 4 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 8+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.4076 K, 1 K
+     Compositions min/max/mass: -0.0143/1.005/0.4167 // -0.002989/0.9958/0.4597
+
+Number of active cells: 64 (on 4 levels)
+Number of degrees of freedom: 2,100 (578+81+289+576+576)
+
+*** Timestep 117:  t=7.3125 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 4 iterations.
+   Solving C_2 system ... 4 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 8+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.4077 K, 1 K
+     Compositions min/max/mass: -0.01651/1.004/0.4167 // -0.00466/0.9974/0.4597
+
+*** Timestep 118:  t=7.375 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 4 iterations.
+   Solving C_2 system ... 4 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.4079 K, 1 K
+     Compositions min/max/mass: -0.02783/0.9997/0.4167 // -0.004773/0.9952/0.4597
+
+Number of active cells: 64 (on 4 levels)
+Number of degrees of freedom: 2,100 (578+81+289+576+576)
+
+*** Timestep 119:  t=7.4375 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 4 iterations.
+   Solving C_2 system ... 3 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.4081 K, 1 K
+     Compositions min/max/mass: -0.02885/0.9978/0.4167 // -0.00567/0.9996/0.4598
+
+*** Timestep 120:  t=7.5 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 4 iterations.
+   Solving C_2 system ... 3 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.4083 K, 1 K
+     Compositions min/max/mass: -0.03123/0.9969/0.4167 // -0.01578/0.9986/0.4599
+
+Number of active cells: 64 (on 4 levels)
+Number of degrees of freedom: 2,100 (578+81+289+576+576)
+
+*** Timestep 121:  t=7.5625 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 4 iterations.
+   Solving C_2 system ... 3 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.4086 K, 1 K
+     Compositions min/max/mass: -0.02299/0.9975/0.4167 // -0.005858/1/0.4601
+
+*** Timestep 122:  t=7.625 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 4 iterations.
+   Solving C_2 system ... 3 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.4089 K, 1 K
+     Compositions min/max/mass: -0.01598/0.9985/0.4166 // -0.0065/1/0.4602
+
+Number of active cells: 64 (on 4 levels)
+Number of degrees of freedom: 2,100 (578+81+289+576+576)
+
+*** Timestep 123:  t=7.6875 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 4 iterations.
+   Solving C_2 system ... 4 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.4091 K, 1 K
+     Compositions min/max/mass: -0.01367/1/0.4166 // -0.006935/1.009/0.4603
+
+*** Timestep 124:  t=7.75 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 4 iterations.
+   Solving C_2 system ... 4 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.4092 K, 1 K
+     Compositions min/max/mass: -0.01105/1/0.4166 // -0.007045/1.006/0.4602
+
+Number of active cells: 64 (on 4 levels)
+Number of degrees of freedom: 2,100 (578+81+289+576+576)
+
+*** Timestep 125:  t=7.8125 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 4 iterations.
+   Solving C_2 system ... 3 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.4092 K, 1 K
+     Compositions min/max/mass: -0.006458/1/0.4166 // -0.006734/1.007/0.4602
+
+*** Timestep 126:  t=7.875 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 4 iterations.
+   Solving C_2 system ... 4 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.4092 K, 1 K
+     Compositions min/max/mass: -0.006877/1/0.4167 // -0.006007/1.013/0.4601
+
+Number of active cells: 64 (on 4 levels)
+Number of degrees of freedom: 2,100 (578+81+289+576+576)
+
+*** Timestep 127:  t=7.9375 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 4 iterations.
+   Solving C_2 system ... 4 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.4089 K, 1 K
+     Compositions min/max/mass: -0.009361/1/0.4167 // -0.007096/1.014/0.4602
+
+*** Timestep 128:  t=8 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 4 iterations.
+   Solving C_2 system ... 3 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.4085 K, 1 K
+     Compositions min/max/mass: -0.01197/1/0.4167 // -0.003531/1.003/0.4602
+
+Number of active cells: 64 (on 4 levels)
+Number of degrees of freedom: 2,100 (578+81+289+576+576)
+
+*** Timestep 129:  t=8.0625 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 3 iterations.
+   Solving C_2 system ... 4 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.4078 K, 1 K
+     Compositions min/max/mass: -0.01415/1/0.4167 // -0.002248/1/0.4602
+
+*** Timestep 130:  t=8.125 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 4 iterations.
+   Solving C_2 system ... 3 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.407 K, 1 K
+     Compositions min/max/mass: -0.01675/0.9968/0.4167 // -0.001855/1.008/0.4603
+
+Number of active cells: 64 (on 4 levels)
+Number of degrees of freedom: 2,100 (578+81+289+576+576)
+
+*** Timestep 131:  t=8.1875 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 4 iterations.
+   Solving C_2 system ... 4 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.4059 K, 1 K
+     Compositions min/max/mass: -0.01081/0.9978/0.4167 // -0.001709/1.027/0.4603
+
+*** Timestep 132:  t=8.25 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 3 iterations.
+   Solving C_2 system ... 4 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.4044 K, 1 K
+     Compositions min/max/mass: -0.01101/1/0.4167 // -0.003316/1.022/0.4603
+
+Number of active cells: 64 (on 4 levels)
+Number of degrees of freedom: 2,100 (578+81+289+576+576)
+
+*** Timestep 133:  t=8.3125 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 3 iterations.
+   Solving C_2 system ... 4 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.4026 K, 1 K
+     Compositions min/max/mass: -0.01256/1.012/0.4167 // -0.001945/1.008/0.4604
+
+*** Timestep 134:  t=8.375 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 4 iterations.
+   Solving C_2 system ... 4 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.4006 K, 1 K
+     Compositions min/max/mass: -0.02977/1.003/0.4167 // -0.002618/1.009/0.4604
+
+Number of active cells: 64 (on 4 levels)
+Number of degrees of freedom: 2,100 (578+81+289+576+576)
+
+*** Timestep 135:  t=8.4375 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 3 iterations.
+   Solving C_2 system ... 4 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.3986 K, 1 K
+     Compositions min/max/mass: -0.01449/1.004/0.4166 // -0.002865/1.006/0.4605
+
+*** Timestep 136:  t=8.5 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 3 iterations.
+   Solving C_2 system ... 4 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.3968 K, 1 K
+     Compositions min/max/mass: -0.003415/1.016/0.4166 // -0.001161/1.001/0.4606
+
+Number of active cells: 64 (on 4 levels)
+Number of degrees of freedom: 2,100 (578+81+289+576+576)
+
+*** Timestep 137:  t=8.5625 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 3 iterations.
+   Solving C_2 system ... 4 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.3952 K, 1 K
+     Compositions min/max/mass: -0.006018/1.008/0.4166 // -0.0007688/1.003/0.4607
+
+*** Timestep 138:  t=8.625 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 3 iterations.
+   Solving C_2 system ... 4 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.3938 K, 1 K
+     Compositions min/max/mass: -0.008387/1.006/0.4165 // -0.001822/1.005/0.4608
+
+Number of active cells: 64 (on 4 levels)
+Number of degrees of freedom: 2,100 (578+81+289+576+576)
+
+*** Timestep 139:  t=8.6875 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 3 iterations.
+   Solving C_2 system ... 4 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.3927 K, 1 K
+     Compositions min/max/mass: -0.006812/1.007/0.4165 // -0.00343/1.007/0.4608
+
+*** Timestep 140:  t=8.75 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 3 iterations.
+   Solving C_2 system ... 4 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.392 K, 1 K
+     Compositions min/max/mass: -0.007414/1.006/0.4165 // -0.006261/1.007/0.4609
+
+Number of active cells: 64 (on 4 levels)
+Number of degrees of freedom: 2,100 (578+81+289+576+576)
+
+*** Timestep 141:  t=8.8125 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 3 iterations.
+   Solving C_2 system ... 4 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 9+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.3915 K, 1 K
+     Compositions min/max/mass: -0.006406/1.013/0.4166 // -0.007424/1.007/0.4609
+
+*** Timestep 142:  t=8.875 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 3 iterations.
+   Solving C_2 system ... 4 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 9+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.3913 K, 1 K
+     Compositions min/max/mass: -0.004405/1.033/0.4166 // -0.009007/1.007/0.461
+
+Number of active cells: 64 (on 4 levels)
+Number of degrees of freedom: 2,100 (578+81+289+576+576)
+
+*** Timestep 143:  t=8.9375 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 3 iterations.
+   Solving C_2 system ... 4 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 9+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.3913 K, 1 K
+     Compositions min/max/mass: -0.003329/1.033/0.4166 // -0.01018/1.007/0.461
+
+*** Timestep 144:  t=9 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 3 iterations.
+   Solving C_2 system ... 4 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 9+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.3915 K, 1 K
+     Compositions min/max/mass: -0.002541/1.033/0.4166 // -0.01086/1.009/0.461
+
+Number of active cells: 64 (on 4 levels)
+Number of degrees of freedom: 2,100 (578+81+289+576+576)
+
+*** Timestep 145:  t=9.0625 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 3 iterations.
+   Solving C_2 system ... 4 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 8+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.3918 K, 1 K
+     Compositions min/max/mass: -0.002458/1.033/0.4166 // -0.01103/1.013/0.4611
+
+*** Timestep 146:  t=9.125 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 3 iterations.
+   Solving C_2 system ... 4 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 8+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.392 K, 1 K
+     Compositions min/max/mass: -0.00111/1.031/0.4166 // -0.01067/1.017/0.4611
+
+Number of active cells: 64 (on 4 levels)
+Number of degrees of freedom: 2,100 (578+81+289+576+576)
+
+*** Timestep 147:  t=9.1875 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 3 iterations.
+   Solving C_2 system ... 4 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 8+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.3923 K, 1 K
+     Compositions min/max/mass: -0.01098/1.029/0.4166 // -0.009794/1.022/0.4611
+
+*** Timestep 148:  t=9.25 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 3 iterations.
+   Solving C_2 system ... 4 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 8+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.3926 K, 1 K
+     Compositions min/max/mass: -0.01024/1.042/0.4166 // -0.008437/1.025/0.4612
+
+Number of active cells: 64 (on 4 levels)
+Number of degrees of freedom: 2,100 (578+81+289+576+576)
+
+*** Timestep 149:  t=9.3125 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 3 iterations.
+   Solving C_2 system ... 4 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 8+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.3929 K, 1 K
+     Compositions min/max/mass: -0.009477/1.046/0.4166 // -0.007734/1.026/0.4612
+
+*** Timestep 150:  t=9.375 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 3 iterations.
+   Solving C_2 system ... 4 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.3932 K, 1 K
+     Compositions min/max/mass: -0.008741/1.039/0.4166 // -0.00719/1.025/0.4612
+
+Number of active cells: 64 (on 4 levels)
+Number of degrees of freedom: 2,100 (578+81+289+576+576)
+
+*** Timestep 151:  t=9.4375 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 3 iterations.
+   Solving C_2 system ... 4 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.3934 K, 1 K
+     Compositions min/max/mass: -0.01081/1.01/0.4166 // -0.007557/1.02/0.4612
+
+*** Timestep 152:  t=9.5 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 3 iterations.
+   Solving C_2 system ... 4 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.3936 K, 1 K
+     Compositions min/max/mass: -0.01262/1.016/0.4165 // -0.008488/1.01/0.4613
+
+Number of active cells: 64 (on 4 levels)
+Number of degrees of freedom: 2,100 (578+81+289+576+576)
+
+*** Timestep 153:  t=9.5625 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 3 iterations.
+   Solving C_2 system ... 4 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.3938 K, 1 K
+     Compositions min/max/mass: -0.01192/1.024/0.4165 // -0.006806/1.004/0.4614
+
+*** Timestep 154:  t=9.625 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 3 iterations.
+   Solving C_2 system ... 4 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.3941 K, 1 K
+     Compositions min/max/mass: -0.01063/1.016/0.4165 // -0.005243/1/0.4615
+
+Number of active cells: 64 (on 4 levels)
+Number of degrees of freedom: 2,100 (578+81+289+576+576)
+
+*** Timestep 155:  t=9.6875 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 4 iterations.
+   Solving C_2 system ... 4 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.3941 K, 1 K
+     Compositions min/max/mass: -0.004099/1.011/0.4165 // -0.003657/1/0.4616
+
+*** Timestep 156:  t=9.75 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 3 iterations.
+   Solving C_2 system ... 4 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.394 K, 1 K
+     Compositions min/max/mass: -0.002395/1.007/0.4165 // -0.00971/1/0.4616
+
+Number of active cells: 64 (on 4 levels)
+Number of degrees of freedom: 2,100 (578+81+289+576+576)
+
+*** Timestep 157:  t=9.8125 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 3 iterations.
+   Solving C_2 system ... 4 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.3938 K, 1 K
+     Compositions min/max/mass: -0.008195/1.004/0.4166 // -0.009931/0.9971/0.4616
+
+*** Timestep 158:  t=9.875 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 3 iterations.
+   Solving C_2 system ... 4 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.3934 K, 1 K
+     Compositions min/max/mass: -0.009341/0.997/0.4166 // -0.005405/0.993/0.4616
+
+Number of active cells: 64 (on 4 levels)
+Number of degrees of freedom: 2,100 (578+81+289+576+576)
+
+*** Timestep 159:  t=9.9375 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 3 iterations.
+   Solving C_2 system ... 4 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.3927 K, 1 K
+     Compositions min/max/mass: -0.01132/0.998/0.4166 // -0.002763/0.9877/0.4617
+
+*** Timestep 160:  t=10 seconds
+   Solving temperature system... 4 iterations.
+   Solving C_1 system ... 4 iterations.
+   Solving C_2 system ... 4 iterations.
+ start to apply the limiter to the discontinuous solution 
+   Rebuilding Stokes preconditioner...
+   Solving Stokes system... 22+0 iterations.
+
+   Postprocessing:
+     Temperature min/avg/max:   0 K, 0.3918 K, 1 K
+     Compositions min/max/mass: -0.007888/1/0.4166 // -0.0007034/0.9905/0.4617
+
+Number of active cells: 64 (on 4 levels)
+Number of degrees of freedom: 2,100 (578+81+289+576+576)
+
+Termination requested by criterion: end time
+
+
++---------------------------------------------+------------+------------+
+| Total wallclock time elapsed since start    |      56.3s |            |
+|                                             |            |            |
+| Section                         | no. calls |  wall time | % of total |
++---------------------------------+-----------+------------+------------+
+| Assemble Stokes system          |       162 |      6.99s |        12% |
+| Assemble composition system     |       324 |      19.2s |        34% |
+| Assemble temperature system     |       162 |      4.78s |       8.5% |
+| Build Stokes preconditioner     |       162 |      7.72s |        14% |
+| Build composition preconditioner|       324 |      1.19s |       2.1% |
+| Build temperature preconditioner|       162 |     0.295s |      0.52% |
+| Solve Stokes system             |       162 |      2.54s |       4.5% |
+| Solve composition system        |       324 |     0.412s |      0.73% |
+| Solve temperature system        |       162 |     0.223s |       0.4% |
+| Initialization                  |         3 |    0.0571s |       0.1% |
+| Postprocessing                  |       161 |      1.67s |         3% |
+| Refine mesh structure, part 1   |        81 |      2.69s |       4.8% |
+| Refine mesh structure, part 2   |        81 |    0.0569s |       0.1% |
+| Setup dof systems               |        82 |      7.15s |        13% |
++---------------------------------+-----------+------------+------------+
+
