@@ -104,7 +104,7 @@ namespace aspect
        * discontinuous discretization.
        */
       const bool use_discontinuous_composition_discretization;
-      
+
       /**
        * A variable that holds whether the composition field(s) should use a
        * limiter for the discontinuous solution.
