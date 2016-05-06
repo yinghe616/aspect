@@ -4,10 +4,9 @@
 set Dimension                              = 2
 set Start time                             = 0
 set End time                               = 20e26
-#set Use years in output instead of seconds = true
 set Use years in output instead of seconds = false
 set CFL number                             = 1.0
-set Output directory                       = gerya_deta1_dg_without_limiter
+set Output directory                       = gerya_deta1_fem
 
 subsection Geometry model
   set Model name = box
@@ -68,7 +67,6 @@ subsection Compositional initial conditions
   set Model name = function
   subsection Function
     set Variable names      = x,z
-#    set Function expression = if(((x>=200e3)&&(x<=300e3)&&(z>=350e3)&&(z<=450e3)), 1, 0) 
     set Function expression = if(((x>187.5e3)&&(x<312.5e3)&&(z>312.5e3)&&(z<437.5e3)), 1, 0) 
  end
 end
@@ -88,8 +86,8 @@ subsection Mesh refinement
   set Strategy                           = composition
   set Initial global refinement          = 4
   set Time steps between mesh refinement = 1
-  set Coarsening fraction                = 0.01
-  set Refinement fraction                = 0.99
+  set Coarsening fraction                = 0.1
+  set Refinement fraction                = 0.8
 end
 
 
@@ -104,13 +102,9 @@ subsection Postprocess
     set List of output variables      = density,viscosity
   end
 end
-subsection Discretization
-#  set Use discontinuous temperature discretization = false
-  set Use discontinuous composition discretization = true
-end
 
 subsection Discretization
   subsection Stabilization parameters
-#    set beta = 0.1
+    set alpha = 1
   end
 end
