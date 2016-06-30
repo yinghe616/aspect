@@ -1014,7 +1014,7 @@ namespace aspect
           = prm.get_bool("Use limiter for discontinuous composition solution");
         if (use_limiter_for_discontinuous_temperature_solution
             || use_limiter_for_discontinuous_composition_solution)
-          AssertThrow (nonlinear_solver == NonlinearSolver::IMPES,
+          AssertThrow (nonlinear_solver == NonlinearSolver::IMPES || nonlinear_solver == NonlinearSolver::iterated_Stokes,
                        ExcMessage ("The bound preserving limiter currently is "
                                    "only implemented for the scheme using IMPES nonlinear solver. "
                                    "Please deactivate the limiter or change the solver scheme."));
