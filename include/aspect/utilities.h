@@ -47,6 +47,25 @@ namespace aspect
     using namespace dealii;
     using namespace dealii::Utilities;
 
+    /**
+     * Given an array @p values, consider three cases:
+     * - If it has size @p N, return the original array.
+     * - If it has size one, return an array of size @p N where all
+     *   elements are equal to the one element of @p value.
+     * - If it has any other size, throw an exception that uses
+     *   @p id_text as an identifying string.
+     *
+     * This function is typically used for parameter lists that can either
+     * contain different values for each of a set of objects (e.g., for
+     * each compositional field), or contain a single value that is then
+     * used for each object.
+     */
+    template <typename T>
+    std::vector<T>
+    possibly_extend_from_1_to_N (const std::vector<T> &values,
+                                 const unsigned int N,
+                                 const std::string &id_text);
+
 
     /**
      * Split the set of DoFs (typically locally owned or relevant) in @p whole_set into blocks
@@ -87,6 +106,47 @@ namespace aspect
     template <int dim>
     std_cxx11::array<Tensor<1,dim>,dim-1>
     orthogonal_vectors (const Tensor<1,dim> &v);
+
+    /**
+     * A function for evaluating real spherical harmonics. It takes the degree (l)
+     * and the order (m) of the spherical harmonic, where l >= 0 and 0 <= m <=l.
+     * It also takes the colatitude (theta) and longitude (phi), which are in
+     * radians.
+     *
+     * There are an unfortunate number of normalization conventions in existence
+     * for spherical harmonics. Here we use fully normalized spherical harmonics
+     * including the Condon-Shortley phase. This corresponds to the definitions
+     * given in equations B.72 and B.99-B.102 in Dahlen and Tromp (1998, ISBN: 9780691001241).
+     * The functional form of the real spherical harmonic is given by
+     *
+     * \f[
+     *    Y_{lm}(\theta, \phi) = \sqrt{2} X_{l \left| m \right| }(\theta) \cos m \phi \qquad \mathrm{if} \qquad -l \le m < 0
+     * \f]
+     * \f[
+     *    Y_{lm}(\theta, \phi) = X_{l 0 }(\theta) \qquad \mathrm{if} \qquad m = 0
+     * \f]
+     * \f[
+     *    Y_{lm}(\theta, \phi) = \sqrt{2} X_{lm}(\theta) \sin m \phi \qquad \mathrm{if}  \qquad 0< m \le m
+     * \f]
+     * where \f$X_{lm}( \theta )\f$ is an associated Legendre function.
+     *
+     * In practice it is often convenient to compute the sine (\f$-l \le m < 0\f$) and cosine (\f$0 < m \le l\f$)
+     * variants of the real spherical harmonic at the same time. That is the approach taken
+     * here, where we return a pair of numbers, the first corresponding the cosine part and the
+     * second corresponding to the sine part. Given this, it is no longer necessary to distinguish
+     * between postitive and negative \f$ m \f$, so this function only accepts \f$ m \ge 0 \f$.
+     * For \f$ m = 0 \f$, there is only one part, which is stored in the first entry of the pair.
+     *
+     * @note This function uses the Boost spherical harmonics implementation internally,
+     * which is not designed for very high order (> 100) spherical harmonics computation.
+     * If you use spherical harmonics of a high order be sure to confirm the accuracy first.
+     * For more information, see:
+     * http://www.boost.org/doc/libs/1_49_0/libs/math/doc/sf_and_dist/html/math_toolkit/special/sf_poly/sph_harm.html
+     */
+    std::pair<double,double> real_spherical_harmonic( unsigned int l, //degree
+                                                      unsigned int m, //order
+                                                      double theta,   //colatitude (radians)
+                                                      double phi );   //longitude (radians)
 
     /**
      * Checks whether a file named filename exists.
@@ -191,6 +251,34 @@ namespace aspect
                  ExcInternalError());
           composition_values_at_q_point[k] = composition_values[k][q];
         }
+    }
+
+    template <typename T>
+    inline
+    std::vector<T>
+    possibly_extend_from_1_to_N (const std::vector<T> &values,
+                                 const unsigned int N,
+                                 const std::string &id_text)
+    {
+      if (values.size() == 1)
+        {
+          return std::vector<T> (N, values[0]);
+        }
+      else if (values.size() == N)
+        {
+          return values;
+        }
+      else
+        {
+          // Non-specified behavior
+          AssertThrow(false,
+                      ExcMessage("Length of " + id_text + " list must be " +
+                                 "either one or " + Utilities::to_string(N)));
+        }
+
+      // This should never happen, but return an empty vector so the compiler
+      // will be happy
+      return std::vector<T> ();
     }
 
 

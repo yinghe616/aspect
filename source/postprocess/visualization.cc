@@ -286,7 +286,8 @@ namespace aspect
         }
 
       // return if graphical output is not requested at this time
-      if (this->get_time() < last_output_time + output_interval)
+      if ((this->get_time() < last_output_time + output_interval)
+          && (this->get_timestep_number() != 0))
         return std::pair<std::string,std::string>();
 
 
@@ -413,7 +414,7 @@ namespace aspect
                                   DataOut<dim>::no_curved_cells);
         }
       else
-        data_out.build_patches();
+        data_out.build_patches(this->get_mapping()); //Giving the mapping ensures that the case with mesh deformation works correctly.
 
       // Now prepare everything for writing the output and choose output format
       std::string solution_file_prefix = "solution-" + Utilities::int_to_string (output_file_number, 5);

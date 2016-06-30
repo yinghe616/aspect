@@ -24,6 +24,7 @@
 #include <aspect/assembly.h>
 #include <aspect/utilities.h>
 #include <aspect/melt.h>
+#include <aspect/free_surface.h>
 
 #include <deal.II/base/index_set.h>
 #include <deal.II/base/conditional_ostream.h>
@@ -41,6 +42,7 @@
 #include <deal.II/fe/fe_dgq.h>
 #include <deal.II/fe/fe_dgp.h>
 #include <deal.II/fe/fe_values.h>
+#include <deal.II/fe/mapping_q.h>
 
 #include <deal.II/numerics/error_estimator.h>
 #include <deal.II/numerics/derivative_approximation.h>
@@ -181,18 +183,13 @@ namespace aspect
                     Triangulation<dim>::smoothing_on_coarsening),
                    parallel::distributed::Triangulation<dim>::mesh_reconstruction_after_repartitioning),
 
-    //Fourth order mapping doesn't really make sense for free surface
-    //calculations (we disable curved boundaries) or we we only have straight
-    //boundaries. So we either pick MappingQ(4,true) or MappingQ(1,false)
-    mapping (
-      (parameters.free_surface_enabled
-       ||
-       geometry_model->has_curved_elements() == false
-      )?1:4,
-      (parameters.free_surface_enabled
-       ||
-       geometry_model->has_curved_elements() == false
-      )?false:true),
+    //The mapping is given by a degree four MappingQ for the case
+    //of a curved mesh, and a degree one MappingQ for a rectangular mesh.
+    //If a free surface is enabled, this is swapped out for a MappingQ1Eulerian,
+    //which allows for mesh deformation.
+    mapping( ( geometry_model->has_curved_elements() ?
+               static_cast<Mapping<dim> *>(new MappingQ<dim>(4, true) ) :
+               static_cast<Mapping<dim> *>(new MappingQ1<dim>() ) ) ),
 
     // define the finite element
     finite_element(introspection.get_fes(), introspection.get_multiplicities()),
@@ -506,7 +503,9 @@ namespace aspect
         //use it, we can run into problems with geometry_model->depth().
         AssertThrow ( parameters.pressure_normalization == "no",
                       ExcMessage("The free surface scheme can only be used with no pressure normalization") );
-        free_surface.reset( new FreeSurfaceHandler( *this, prm ) );
+
+        //Allocate the FreeSurfaceHandler object
+        free_surface.reset( new FreeSurfaceHandler<dim>( *this, prm ) );
       }
 
     // Initialize the melt handler
@@ -909,9 +908,8 @@ namespace aspect
                     ExcInternalError());
             VectorTools::interpolate_boundary_values (dof_handler,
                                                       *p,
-                                                      VectorFunctionFromScalarFunctionObject<dim>(std_cxx11::bind (&BoundaryTemperature::Interface<dim>::temperature,
+                                                      VectorFunctionFromScalarFunctionObject<dim>(std_cxx11::bind (&BoundaryTemperature::Interface<dim>::boundary_temperature,
                                                           std_cxx11::cref(*boundary_temperature),
-                                                          std_cxx11::cref(*geometry_model),
                                                           *p,
                                                           std_cxx11::_1),
                                                           introspection.component_masks.temperature.first_selected_component(),
@@ -941,9 +939,8 @@ namespace aspect
                       ExcInternalError());
               VectorTools::interpolate_boundary_values (dof_handler,
                                                         *p,
-                                                        VectorFunctionFromScalarFunctionObject<dim>(std_cxx11::bind (&BoundaryComposition::Interface<dim>::composition,
+                                                        VectorFunctionFromScalarFunctionObject<dim>(std_cxx11::bind (&BoundaryComposition::Interface<dim>::boundary_composition,
                                                             std_cxx11::cref(*boundary_composition),
-                                                            std_cxx11::cref(*geometry_model),
                                                             *p,
                                                             std_cxx11::_1,
                                                             c),
@@ -1228,6 +1225,13 @@ namespace aspect
       pcout.get_stream().imbue(s);
     }
 
+    //We need to setup the free surface degrees of freedom first if there is a free
+    //surface active, since the mapping must be in place before applying boundary
+    //conditions that rely on it (such as no flux bcs).
+    if (parameters.free_surface_enabled)
+      free_surface->setup_dofs();
+
+
     //reinit the constraints matrix and make hanging node constraints
     constraints.clear();
     constraints.reinit(introspection.index_sets.system_relevant_set);
@@ -1292,7 +1296,7 @@ namespace aspect
                                                        introspection.component_indices.velocities[0],
                                                        parameters.tangential_velocity_boundary_indicators,
                                                        constraints,
-                                                       mapping);
+                                                       *mapping);
     }
     constraints.close();
 
@@ -1313,8 +1317,6 @@ namespace aspect
     rebuild_stokes_matrix         = true;
     rebuild_stokes_preconditioner = true;
 
-    if (parameters.free_surface_enabled)
-      free_surface->setup_dofs();
 
     computing_timer.exit_section();
   }
@@ -1534,18 +1536,40 @@ namespace aspect
     mesh_refinement_manager.tag_additional_cells ();
 
 
-    // limit maximum refinement level
-    if (triangulation.n_levels() > max_grid_level)
-      for (typename Triangulation<dim>::active_cell_iterator
-           cell = triangulation.begin_active(max_grid_level);
-           cell != triangulation.end(); ++cell)
-        cell->clear_refine_flag ();
+    // clear refinement flags if parameter.refinement_fraction=0.0
+    if (parameters.refinement_fraction==0.0)
+      {
+        for (typename Triangulation<dim>::active_cell_iterator
+             cell = triangulation.begin_active();
+             cell != triangulation.end(); ++cell)
+          cell->clear_refine_flag ();
+      }
+    else
+      {
+        // limit maximum refinement level
+        if (triangulation.n_levels() > max_grid_level)
+          for (typename Triangulation<dim>::active_cell_iterator
+               cell = triangulation.begin_active(max_grid_level);
+               cell != triangulation.end(); ++cell)
+            cell->clear_refine_flag ();
+      }
 
-    // limit minimum refinement level
-    for (typename Triangulation<dim>::active_cell_iterator
-         cell = triangulation.begin_active(0);
-         cell != triangulation.end_active(parameters.min_grid_level); ++cell)
-      cell->clear_coarsen_flag ();
+    // clear coarsening flags if parameter.coarsening_fraction=0.0
+    if (parameters.coarsening_fraction==0.0)
+      {
+        for (typename Triangulation<dim>::active_cell_iterator
+             cell = triangulation.begin_active();
+             cell != triangulation.end(); ++cell)
+          cell->clear_coarsen_flag ();
+      }
+    else
+      {
+        // limit minimum refinement level
+        for (typename Triangulation<dim>::active_cell_iterator
+             cell = triangulation.begin_active(0);
+             cell != triangulation.end_active(parameters.min_grid_level); ++cell)
+          cell->clear_coarsen_flag ();
+      }
 
     std::vector<const LinearAlgebra::BlockVector *> x_system (2);
     x_system[0] = &solution;
@@ -1563,10 +1587,11 @@ namespace aspect
 
     if (parameters.free_surface_enabled)
       {
-        x_fs_system[0] = &free_surface->mesh_vertices;
+        x_fs_system[0] = &free_surface->mesh_displacements;
         freesurface_trans.reset (new parallel::distributed::SolutionTransfer<dim,LinearAlgebra::Vector>
                                  (free_surface->free_surface_dof_handler));
       }
+
 
     // Possibly store data of plugins associated with cells
     signals.pre_refinement_store_user_data(triangulation);
@@ -1622,28 +1647,23 @@ namespace aspect
       constraints.distribute (old_distributed_system);
       old_solution = old_distributed_system;
 
+      // do the same as above also for the free surface solution
       if (parameters.free_surface_enabled)
         {
           constraints.distribute (distributed_mesh_velocity);
           free_surface->mesh_velocity = distributed_mesh_velocity;
-        }
 
-      // do the same as above also for the free surface solution
-      if (parameters.free_surface_enabled)
-        {
-          LinearAlgebra::Vector distributed_mesh_vertices;
-          distributed_mesh_vertices.reinit(free_surface->mesh_locally_owned,
-                                           mpi_communicator);
+          LinearAlgebra::Vector distributed_mesh_displacements;
+
+          distributed_mesh_displacements.reinit(free_surface->mesh_locally_owned,
+                                                mpi_communicator);
 
           std::vector<LinearAlgebra::Vector *> system_tmp (1);
-          system_tmp[0] = &distributed_mesh_vertices;
+          system_tmp[0] = &distributed_mesh_displacements;
 
           freesurface_trans->interpolate (system_tmp);
-          free_surface->mesh_vertex_constraints.distribute (distributed_mesh_vertices);
-          free_surface->mesh_vertices = distributed_mesh_vertices;
-
-          //make sure the mesh is consistent with mesh_vertices
-          free_surface->displace_mesh ();
+          free_surface->mesh_vertex_constraints.distribute (distributed_mesh_displacements);
+          free_surface->mesh_displacements = distributed_mesh_displacements;
         }
 
       // Possibly load data of plugins associated with cells
@@ -1652,7 +1672,7 @@ namespace aspect
     computing_timer.exit_section();
 
     //calculate global volume after displacing mesh (if we have, in fact, displaced it)
-    global_volume = GridTools::volume (triangulation, mapping);
+    global_volume = GridTools::volume (triangulation, *mapping);
   }
 
   /**
@@ -2053,7 +2073,7 @@ namespace aspect
                                                            dim+1, //velocity and pressure
                                                            introspection.n_components);
 
-          VectorTools::interpolate (mapping, dof_handler, func, distributed_stokes_solution);
+          VectorTools::interpolate (*mapping, dof_handler, func, distributed_stokes_solution);
 
           const unsigned int block_vel = introspection.block_indices.velocities;
           const unsigned int block_p = introspection.block_indices.pressure;
@@ -2134,13 +2154,13 @@ namespace aspect
             triangulation.execute_coarsening_and_refinement();
           }
 
-        global_volume = GridTools::volume (triangulation, mapping);
-
         time                      = parameters.start_time;
         timestep_number           = 0;
         time_step = old_time_step = 0;
 
         setup_dofs();
+
+        global_volume = GridTools::volume (triangulation, *mapping);
       }
 
     // start the timer for periodic checkpoints after the setup above
@@ -2151,7 +2171,7 @@ namespace aspect
 
     if (parameters.resume_computation == false)
       {
-        computing_timer.enter_section ("Initialization");
+        computing_timer.enter_section ("Setup initial conditions");
 
         time                      = parameters.start_time;
         timestep_number           = 0;
@@ -2210,12 +2230,6 @@ namespace aspect
         // invalidate the value of pre_refinement_step since it will no longer be used from here on
         if ( timestep_number == 0 )
           pre_refinement_step = std::numeric_limits<unsigned int>::max();
-
-        // as soon as the mesh starts deforming with a free surface, a manifold
-        // description and boundary shape are no longer guaranteed to be any good.
-        // Here we detach those manifolds and boundaries.
-        if ( timestep_number == 0 && parameters.free_surface_enabled == true )
-          free_surface->detach_manifolds();
 
         postprocess ();
 
