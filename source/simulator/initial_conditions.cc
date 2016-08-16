@@ -91,60 +91,63 @@ namespace aspect
 
         std::vector<types::global_dof_index> local_dof_indices (finite_element.dofs_per_cell);
 
-#if DEAL_II_VERSION_GTE(8,5,0)
-        const VectorFunctionFromScalarFunctionObject<dim, double> &advf_init_function =
-          (advf.is_temperature()
-           ?
-           VectorFunctionFromScalarFunctionObject<dim, double>(std_cxx11::bind(&InitialConditions::Interface<dim>::initial_temperature,
-                                                                               std::ref(*initial_conditions),
-                                                                               std_cxx11::_1),
-                                                               introspection.component_indices.temperature,
-                                                               introspection.n_components)
-           :
-           VectorFunctionFromScalarFunctionObject<dim, double>(std_cxx11::bind(&CompositionalInitialConditions::Interface<dim>::initial_composition,
-                                                                               std::ref(*compositional_initial_conditions),
-                                                                               std_cxx11::_1,
-                                                                               n-1),
-                                                               introspection.component_indices.compositional_fields[n-1],
-                                                               introspection.n_components));
+        /*
+         #if DEAL_II_VERSION_GTE(8,5,0)
+                const VectorFunctionFromScalarFunctionObject<dim, double> &advf_init_function =
+                  (advf.is_temperature()
+                   ?
+                   VectorFunctionFromScalarFunctionObject<dim, double>(std_cxx11::bind(&InitialConditions::Interface<dim>::initial_temperature,
+                                                                                       std::ref(*initial_conditions),
+                                                                                       std_cxx11::_1),
+                                                                       introspection.component_indices.temperature,
+                                                                       introspection.n_components)
+                   :
+                   VectorFunctionFromScalarFunctionObject<dim, double>(std_cxx11::bind(&CompositionalInitialConditions::Interface<dim>::initial_composition,
+                                                                                       std::ref(*compositional_initial_conditions),
+                                                                                       std_cxx11::_1,
+                                                                                       n-1),
+                                                                       introspection.component_indices.compositional_fields[n-1],
+                                                                       introspection.n_components));
 
-        const ComponentMask advf_mask =
-          (advf.is_temperature()
-           ?
-           introspection.component_masks.temperature
-           :
-           introspection.component_masks.compositional_fields[n-1]);
+                const ComponentMask advf_mask =
+                  (advf.is_temperature()
+                   ?
+                   introspection.component_masks.temperature
+                   :
+                   introspection.component_masks.compositional_fields[n-1]);
 
-        VectorTools::interpolate(*mapping,
-                                 dof_handler,
-                                 advf_init_function,
-                                 initial_solution,
-                                 advf_mask);
 
-        if (parameters.normalized_fields.size()>0 && n==1)
-          for (typename DoFHandler<dim>::active_cell_iterator cell = dof_handler.begin_active();
-               cell != dof_handler.end(); ++cell)
-            if (cell->is_locally_owned())
-              {
-                fe_values.reinit (cell);
+                VectorTools::interpolate(*mapping,
+                                         dof_handler,
+                                         advf_init_function,
+                                         initial_solution,
+                                         advf_mask);
 
-                // Go through the support points for each dof
-                for (unsigned int i=0; i<finite_element.base_element(base_element).dofs_per_cell; ++i)
-                  {
-                    // if it is specified in the parameter file that the sum of all compositional fields
-                    // must not exceed one, this should be checked
-                    double sum = 0;
-                    for (unsigned int m=0; m<parameters.normalized_fields.size(); ++m)
-                      sum += compositional_initial_conditions->initial_composition(fe_values.quadrature_point(i),
-                                                                                   parameters.normalized_fields[m]);
-                    if (std::abs(sum) > 1.0+std::numeric_limits<double>::epsilon())
+                if (parameters.normalized_fields.size()>0 && n==1)
+                  for (typename DoFHandler<dim>::active_cell_iterator cell = dof_handler.begin_active();
+                       cell != dof_handler.end(); ++cell)
+                    if (cell->is_locally_owned())
                       {
-                        max_sum_comp = std::max(sum, max_sum_comp);
-                        normalize_composition = true;
+                        fe_values.reinit (cell);
+
+                        // Go through the support points for each dof
+                        for (unsigned int i=0; i<finite_element.base_element(base_element).dofs_per_cell; ++i)
+                          {
+                            // if it is specified in the parameter file that the sum of all compositional fields
+                            // must not exceed one, this should be checked
+                            double sum = 0;
+                            for (unsigned int m=0; m<parameters.normalized_fields.size(); ++m)
+                              sum += compositional_initial_conditions->initial_composition(fe_values.quadrature_point(i),
+                                                                                           parameters.normalized_fields[m]);
+                            if (std::abs(sum) > 1.0+std::numeric_limits<double>::epsilon())
+                              {
+                                max_sum_comp = std::max(sum, max_sum_comp);
+                                normalize_composition = true;
+                              }
+                          }
                       }
-                  }
-              }
-#else
+        #else
+        */
         for (typename DoFHandler<dim>::active_cell_iterator cell = dof_handler.begin_active();
              cell != dof_handler.end(); ++cell)
           if (cell->is_locally_owned())
@@ -165,7 +168,7 @@ namespace aspect
                      ?
                      initial_conditions->initial_temperature(fe_values.quadrature_point(i))
                      :
-                     compositional_initial_conditions->initial_composition(fe_values.quadrature_point(i),n-1));
+                     compositional_initial_conditions->initial_composition(fe_values.quadrature_point(finite_element.base_element(base_element).dofs_per_cell-2),n-1));
                   initial_solution(local_dof_indices[system_local_dof]) = value;
 
                   // if it is specified in the parameter file that the sum of all compositional fields
@@ -185,7 +188,7 @@ namespace aspect
 
                 }
             }
-#endif
+//#endif
 
         initial_solution.compress(VectorOperation::insert);
 
