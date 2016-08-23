@@ -167,9 +167,11 @@ namespace aspect
           std::vector<SymmetricTensor<2,dim> > old_old_strain_rates;
 
           std::vector<double>         old_temperature_values;
+          std::vector<double>         face_old_temperature_values;
           std::vector<double>         old_old_temperature_values;
 
           std::vector<double>         old_field_values;
+          std::vector<double>         face_old_field_values;
           std::vector<double>         old_old_field_values;
           std::vector<Tensor<1,dim> > old_field_grads;
           std::vector<Tensor<1,dim> > old_old_field_grads;
@@ -177,6 +179,7 @@ namespace aspect
           std::vector<double>         old_old_field_laplacians;
 
           std::vector<std::vector<double> > old_composition_values;
+          std::vector<std::vector<double> > face_old_composition_values;
           std::vector<std::vector<double> > old_old_composition_values;
 
           std::vector<double>         current_temperature_values;
@@ -279,16 +282,19 @@ namespace aspect
            * that correspond only to the variables listed in local_dof_indices
            */
           FullMatrix<double>          local_matrix;
+          FullMatrix<double>          local_mass_matrix;
+          FullMatrix<double>          local_advec_matrix;
+          FullMatrix<double>          local_stiff_matrix;
           /** Local contributions to the global matrix from the face terms in the
-           * discontinuous Galerkin method. The vectors are of length
-           * GeometryInfo<dim>::max_children_per_face * GeometryInfo<dim>::faces_per_cell
-           * so as to hold one matrix for each possible face or subface of the cell.
-           * The discontinuous Galerkin bilinear form contains terms arising from internal
-           * (to the cell) values and external (to the cell) values.
-           * _int_ext and ext_int hold the terms arising from the pairing between a cell
-           * and its neighbor, while _ext_ext is the pairing of the neighbor's dofs with
-           * themselves. In the continuous Galerkin case, these are unused, and set to size zero.
-           **/
+          * discontinuous Galerkin method. The vectors are of length
+          * GeometryInfo<dim>::max_children_per_face * GeometryInfo<dim>::faces_per_cell
+          * so as to hold one matrix for each possible face or subface of the cell.
+          * The discontinuous Galerkin bilinear form contains terms arising from internal
+          * (to the cell) values and external (to the cell) values.
+          * _int_ext and ext_int hold the terms arising from the pairing between a cell
+          * and its neighbor, while _ext_ext is the pairing of the neighbor's dofs with
+          * themselves. In the continuous Galerkin case, these are unused, and set to size zero.
+          **/
           std::vector<FullMatrix<double> >         local_matrices_int_ext;
           std::vector<FullMatrix<double> >         local_matrices_ext_int;
           std::vector<FullMatrix<double> >         local_matrices_ext_ext;
