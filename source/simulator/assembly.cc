@@ -1201,14 +1201,27 @@ namespace aspect
                 }
               if (!advection_field.is_temperature())
                 {
+                  const double field_term_for_rhs
+                          = (use_bdf2_scheme ?
+                             (scratch.old_field_values[q] *
+                              (1 + time_step / old_time_step)
+                              -
+                              scratch.old_old_field_values[q] *
+                              (time_step * time_step) /
+                              (old_time_step * (time_step + old_time_step)))
+                                             :
+                             scratch.old_field_values[q]);
+                  const double factor = (use_bdf2_scheme) ? ((2 * time_step + old_time_step) /
+                                                             (time_step + old_time_step)) : 1.0;
                   const double reaction_term =
                     scratch.material_model_outputs.reaction_terms[q][advection_field.compositional_variable];
                   for (unsigned int i = 0; i < advection_dofs_per_cell; ++i)
                     {
-                      data.local_rhs(i) += reaction_term * scratch.phi_field[i]
+                      data.local_rhs(i) += (field_term_for_rhs + reaction_term)
+                                           * scratch.phi_field[i]
                                            * scratch.finite_element_values.JxW(q);
                     }
-                  data.local_matrix.add(1.0, data.local_mass_matrix,
+                  data.local_matrix.add(factor, data.local_mass_matrix,
                                         time_step, data.local_advec_matrix,
                                         (time_step * artificial_viscosity),
                                         data.local_stiff_matrix);
@@ -1257,17 +1270,14 @@ namespace aspect
                   for (unsigned int i = 0; i < advection_dofs_per_cell; ++i)
                     {
                       data.local_rhs(i)
-                      += (field_term_for_rhs * scratch.phi_field[i]
-                          + time_step *
-                          scratch.phi_field[i]
-                          * gamma)
-                         *
-                         scratch.finite_element_values.JxW(q);
+                      += (field_term_for_rhs + time_step * gamma )
+                         * scratch.phi_field[i]
+                         * scratch.finite_element_values.JxW(q);
                     }
                   //   data.local_matrix += density_c_P * (factor * data.local_mass_matrix + time_step * data.local_advec_matrix)
                   //                               +time_step * (artificial_viscosity + conductivity ) * data.local_stiff_matrix;
-                  data.local_matrix.add(density_c_P, data.local_mass_matrix,
-                                        time_step * density_c_P, data.local_advec_matrix,
+                  data.local_matrix.add((density_c_P+latent_heat_LHS) * factor, data.local_mass_matrix,
+                                        time_step * (density_c_P + latent_heat_LHS), data.local_advec_matrix,
                                         time_step * (artificial_viscosity + conductivity),
                                         data.local_stiff_matrix);
                 }
@@ -1467,12 +1477,12 @@ namespace aspect
                           * scratch.face_phi_field[i]
                           * dirichlet_value
 //change the sign if put to the RHS
-                          - (density_c_P + latent_heat_LHS)
-                          * time_step
-                          * (current_u
-                             * scratch.face_finite_element_values->normal_vector(q))
-                          * (inflow ? dirichlet_value : scratch.face_old_field_values[q]) //YINGHE
-                          * scratch.face_phi_field[i]
+  //                        - (density_c_P + latent_heat_LHS)
+    //                      * time_step
+      //                    * (current_u
+        //                     * scratch.face_finite_element_values->normal_vector(q))
+          //                * (inflow ? dirichlet_value : scratch.face_old_field_values[q]) //YINGHE
+            //              * scratch.face_phi_field[i]
                          )
                          *
                          scratch.face_finite_element_values->JxW(q);
@@ -2897,6 +2907,10 @@ namespace aspect
                                                                        scratch.old_field_values);
     scratch.finite_element_values[solution_field].get_function_values (old_old_solution,
                                                                        scratch.old_old_field_values);
+    scratch.finite_element_values[solution_field].get_function_gradients (old_solution,
+                                                                          scratch.old_field_grads);
+    scratch.finite_element_values[solution_field].get_function_gradients (old_old_solution,
+                                                                          scratch.old_old_field_grads);
 
 
     scratch.finite_element_values[introspection.extractors.velocities].get_function_values(current_linearization_point,
