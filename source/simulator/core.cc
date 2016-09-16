@@ -1150,6 +1150,7 @@ namespace aspect
     sp.compress();
 
     system_matrix.reinit (sp);
+    system_mass_matrix.reinit (sp);
 #endif
   }
 

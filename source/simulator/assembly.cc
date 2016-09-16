@@ -1202,15 +1202,15 @@ namespace aspect
               if (!advection_field.is_temperature())
                 {
                   const double field_term_for_rhs
-                          = (use_bdf2_scheme ?
-                             (scratch.old_field_values[q] *
-                              (1 + time_step / old_time_step)
-                              -
-                              scratch.old_old_field_values[q] *
-                              (time_step * time_step) /
-                              (old_time_step * (time_step + old_time_step)))
-                                             :
-                             scratch.old_field_values[q]);
+                    = (use_bdf2_scheme ?
+                       (scratch.old_field_values[q] *
+                        (1 + time_step / old_time_step)
+                        -
+                        scratch.old_old_field_values[q] *
+                        (time_step * time_step) /
+                        (old_time_step * (time_step + old_time_step)))
+                       :
+                       scratch.old_field_values[q]);
                   const double factor = (use_bdf2_scheme) ? ((2 * time_step + old_time_step) /
                                                              (time_step + old_time_step)) : 1.0;
                   const double reaction_term =
@@ -1221,10 +1221,8 @@ namespace aspect
                                            * scratch.phi_field[i]
                                            * scratch.finite_element_values.JxW(q);
                     }
-                  data.local_matrix.add(factor, data.local_mass_matrix,
-                                        time_step, data.local_advec_matrix,
-                                        (time_step * artificial_viscosity),
-                                        data.local_stiff_matrix);
+                  data.local_matrix.add(time_step, data.local_advec_matrix,
+                                        time_step * artificial_viscosity, data.local_stiff_matrix);
                 }
               else
                 {
@@ -1476,13 +1474,6 @@ namespace aspect
                           * penalty
                           * scratch.face_phi_field[i]
                           * dirichlet_value
-//change the sign if put to the RHS
-  //                        - (density_c_P + latent_heat_LHS)
-    //                      * time_step
-      //                    * (current_u
-        //                     * scratch.face_finite_element_values->normal_vector(q))
-          //                * (inflow ? dirichlet_value : scratch.face_old_field_values[q]) //YINGHE
-            //              * scratch.face_phi_field[i]
                          )
                          *
                          scratch.face_finite_element_values->JxW(q);
@@ -1751,22 +1742,6 @@ namespace aspect
                                      0.)
                                  )
                                  * scratch.face_finite_element_values->JxW(q);
-
-                              if (advection_field.is_discontinuous(introspection))
-                                {
-                                  /*                                  data.local_advec_matrix(i,j)
-                                                                    += - (inflow
-                                                                          ?
-                                                                          time_step
-                                                 solution_fieldu
-                                                                            * scratch.face_finite_element_values->normal_vector(q))
-                                                                          * scratch.face_phi_field[i]
-                                                                          * scratch.face_phi_field[j]
-                                                                          * scratch.face_finite_element_values->JxW(q)
-                                                                          :
-                                                                          0.);
-                                  */
-                                }
 
                               data.local_matrices_int_ext[face_no * GeometryInfo<dim>::max_children_per_face](i,j)
                               += (- 0.5 * time_step * neighbor_conductivity
@@ -3035,7 +3010,7 @@ namespace aspect
   template <int dim>
   void
   Simulator<dim>::
-  copy_local_to_global_advection_system (const AdvectionField &/*advection_field*/,
+  copy_local_to_global_advection_system (const AdvectionField &advection_field/*advection_field*/,
                                          const internal::Assembly::CopyData::AdvectionSystem<dim> &data)
   {
     // copy entries into the global matrix. note that these local contributions
@@ -3044,6 +3019,13 @@ namespace aspect
                                                     data.local_rhs,
                                                     data.local_dof_indices,
                                                     system_matrix,
+                                                    system_rhs);
+    Vector<double> rhs_tmp(data.local_rhs);
+    rhs_tmp = 0.0;
+    current_constraints.distribute_local_to_global (data.local_mass_matrix,
+                                                    rhs_tmp,
+                                                    data.local_dof_indices,
+                                                    system_mass_matrix,
                                                     system_rhs);
 
     /* In the following, we copy DG contributions element by element. This
@@ -3089,6 +3071,7 @@ namespace aspect
 
     const unsigned int block_idx = advection_field.block_index(introspection);
     system_matrix.block(block_idx, block_idx) = 0;
+    system_mass_matrix.block(block_idx, block_idx) = 0;
     system_rhs = 0;
 
     typedef
@@ -3169,6 +3152,11 @@ namespace aspect
          AdvectionSystem<dim> (finite_element.base_element(advection_field.base_element(introspection)),
                                allocate_neighbor_contributions));
 
+    LinearAlgebra::BlockVector rhs_tmp2(old_solution);
+    rhs_tmp2 *=-1.0;
+    //system_matrix.block(block_idx,block_idx).vmult_add(system_rhs.block(block_idx),rhs_tmp2.block(block_idx));
+    //system_matrix.block(block_idx,block_idx).copy_from(system_mass_matrix.block(block_idx,block_idx));
+    system_matrix.block(block_idx,block_idx).add(1.0, system_mass_matrix.block(block_idx,block_idx));
     system_matrix.compress(VectorOperation::add);
     system_rhs.compress(VectorOperation::add);
 

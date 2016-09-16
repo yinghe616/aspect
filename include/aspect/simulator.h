@@ -1329,6 +1329,7 @@ namespace aspect
        * @{
        */
       LinearAlgebra::BlockSparseMatrix                          system_matrix;
+      LinearAlgebra::BlockSparseMatrix                          system_mass_matrix;
       LinearAlgebra::BlockSparseMatrix                          system_preconditioner_matrix;
 
       LinearAlgebra::BlockVector                                solution;
