@@ -1142,7 +1142,8 @@ namespace aspect
                                         internal::Assembly::CopyData::AdvectionSystem<dim> &data) const
         {
           const Introspection<dim> &introspection = this->introspection();
-          const bool use_bdf2_scheme = (this->get_timestep_number() > 1);
+          //const bool use_bdf2_scheme = (this->get_timestep_number() > 1);
+          const bool use_bdf2_scheme = false;
           const unsigned int n_q_points = scratch.finite_element_values.n_quadrature_points;
           const unsigned int advection_dofs_per_cell = data.local_dof_indices.size();
 
@@ -1150,6 +1151,7 @@ namespace aspect
           const double old_time_step = this->get_old_timestep();
 
           const unsigned int solution_component = advection_field.component_index(introspection);
+
 
           const FEValuesExtractors::Scalar solution_field = advection_field.scalar_extractor(introspection);
 
@@ -1175,7 +1177,8 @@ namespace aspect
               // do the actual assembly. note that we only need to loop over the advection
               // shape functions because these are the only contributions we compute here
 
-              data.local_mass_matrix = 0.0;
+              FullMatrix<double> local_mass_matrix_tmp(data.local_mass_matrix);
+              local_mass_matrix_tmp   = 0.0;
               data.local_advec_matrix = 0.0;
               data.local_stiff_matrix = 0.0;
 
@@ -1183,7 +1186,7 @@ namespace aspect
                 {
                   for (unsigned int j = 0; j < advection_dofs_per_cell; ++j)
                     {
-                      data.local_mass_matrix(i, j)
+                      local_mass_matrix_tmp(i, j)
                         = (scratch.phi_field[i] * scratch.phi_field[j])
                           * scratch.finite_element_values.JxW(q);
 
@@ -1223,6 +1226,8 @@ namespace aspect
                     }
                   data.local_matrix.add(time_step, data.local_advec_matrix,
                                         time_step * artificial_viscosity, data.local_stiff_matrix);
+                  data.local_mass_matrix.add(factor, local_mass_matrix_tmp);
+            //      data.local_matrix.add(1.0, data.local_mass_matrix);
                 }
               else
                 {
@@ -1274,10 +1279,11 @@ namespace aspect
                     }
                   //   data.local_matrix += density_c_P * (factor * data.local_mass_matrix + time_step * data.local_advec_matrix)
                   //                               +time_step * (artificial_viscosity + conductivity ) * data.local_stiff_matrix;
-                  data.local_matrix.add((density_c_P+latent_heat_LHS) * factor, data.local_mass_matrix,
-                                        time_step * (density_c_P + latent_heat_LHS), data.local_advec_matrix,
+                  data.local_matrix.add(time_step * (density_c_P + latent_heat_LHS), data.local_advec_matrix,
                                         time_step * (artificial_viscosity + conductivity),
                                         data.local_stiff_matrix);
+                  data.local_mass_matrix.add((density_c_P+latent_heat_LHS) * factor, local_mass_matrix_tmp);
+                  //      data.local_matrix.add(1.0, data.local_mass_matrix);
                 }
 
             }
@@ -3010,7 +3016,7 @@ namespace aspect
   template <int dim>
   void
   Simulator<dim>::
-  copy_local_to_global_advection_system (const AdvectionField &advection_field/*advection_field*/,
+  copy_local_to_global_advection_system (const AdvectionField &/*advection_field*/,
                                          const internal::Assembly::CopyData::AdvectionSystem<dim> &data)
   {
     // copy entries into the global matrix. note that these local contributions
@@ -3154,9 +3160,9 @@ namespace aspect
 
     LinearAlgebra::BlockVector rhs_tmp2(old_solution);
     rhs_tmp2 *=-1.0;
-    //system_matrix.block(block_idx,block_idx).vmult_add(system_rhs.block(block_idx),rhs_tmp2.block(block_idx));
-    //system_matrix.block(block_idx,block_idx).copy_from(system_mass_matrix.block(block_idx,block_idx));
-    system_matrix.block(block_idx,block_idx).add(1.0, system_mass_matrix.block(block_idx,block_idx));
+    system_matrix.block(block_idx,block_idx).vmult_add(system_rhs.block(block_idx),rhs_tmp2.block(block_idx));
+    system_matrix.block(block_idx,block_idx).copy_from(system_mass_matrix.block(block_idx,block_idx));
+    //system_matrix.block(block_idx,block_idx).add(1.0, system_mass_matrix.block(block_idx,block_idx));
     system_matrix.compress(VectorOperation::add);
     system_rhs.compress(VectorOperation::add);
 
