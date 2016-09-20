@@ -1948,11 +1948,11 @@ namespace aspect
           if (parameters.free_surface_enabled)
             free_surface->execute ();
 
-          assemble_advection_system (AdvectionField::temperature());
+/*          assemble_advection_system (AdvectionField::temperature());
           solve_advection(AdvectionField::temperature());
 
           current_linearization_point.block(introspection.block_indices.temperature)
-            = solution.block(introspection.block_indices.temperature);
+            = solution.block(introspection.block_indices.temperature);*/
 
           for (unsigned int c=0; c < parameters.n_compositional_fields; ++c)
             {
