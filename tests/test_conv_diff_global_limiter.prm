@@ -102,7 +102,6 @@ end
 
 subsection Discretization
   set Use discontinuous composition discretization = true
-#  set Use local discontinuous composition discretization = true
   subsection Stabilization parameters
       set Use limiter for discontinuous composition solution = true # apply the limiter to the DG solutions
       set Global composition maximum = 1.0
