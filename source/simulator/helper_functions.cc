@@ -1459,7 +1459,59 @@ namespace aspect
          :
          introspection.extractors.compositional_fields[advection_field.compositional_variable]
         );
-/*
+
+    // find out the local minimum/maximum
+    Vector<double> max_solution_per_cell;
+    Vector<double> min_solution_per_cell;
+    Vector<double> max_solution_per_cell_temp;
+    Vector<double> min_solution_per_cell_temp;
+    max_solution_per_cell.reinit(triangulation.n_active_cells());
+    max_solution_per_cell_temp.reinit(triangulation.n_active_cells());
+
+    min_solution_per_cell.reinit(triangulation.n_active_cells());
+    min_solution_per_cell_temp.reinit(triangulation.n_active_cells());
+
+    typename DoFHandler<dim>::active_cell_iterator
+    cell = dof_handler.begin_active(),
+    endc = dof_handler.end();
+
+    for (; cell != endc; ++cell) {
+      if (cell->is_locally_owned()) {
+        fe_values.reinit(cell);
+        fe_values[field].get_function_values(solution, values);
+        max_solution_per_cell_temp[cell->active_cell_index()] = *std::min_element (values.begin(), values.end());
+        min_solution_per_cell_temp[cell->active_cell_index()] = *std::max_element (values.begin(), values.end());
+      }
+    }
+
+    cell = dof_handler.begin_active();
+    endc = dof_handler.end();
+    for (; cell != endc; ++cell)
+    {
+      if (cell->is_locally_owned())
+        for (unsigned int face_no=0; face_no<GeometryInfo<dim>::faces_per_cell; ++face_no)
+          if (cell->at_boundary(face_no) == false)
+          {
+            if (cell->neighbor(face_no)->active()) {
+              max_solution_per_cell[cell->active_cell_index()] = std::max(
+                      max_solution_per_cell_temp[cell->active_cell_index()],
+                      max_solution_per_cell_temp[cell->neighbor(face_no)->active_cell_index()]);
+              min_solution_per_cell[cell->active_cell_index()] = std::min(
+                      min_solution_per_cell_temp[cell->active_cell_index()],
+                      min_solution_per_cell_temp[cell->neighbor(face_no)->active_cell_index()]);
+            }
+            else
+              for (unsigned int l=0; l<cell->neighbor(face_no)->n_children(); l++)
+                if (cell->neighbor(face_no)->child(l)->active()) {
+                  max_solution_per_cell[cell->active_cell_index()] = std::max(
+                          max_solution_per_cell_temp[cell->active_cell_index()],
+                          max_solution_per_cell_temp[cell->neighbor(face_no)->child(l)->active_cell_index()]);
+                  min_solution_per_cell[cell->active_cell_index()] = std::min(
+                          min_solution_per_cell_temp[cell->active_cell_index()],
+                          min_solution_per_cell_temp[cell->neighbor(face_no)->child(l)->active_cell_index()]);
+                }
+          }
+    }
     const double max_solution_exact_global = (advection_field.is_temperature()
                                               ?
                                               parameters.global_temperature_max_preset
@@ -1472,54 +1524,6 @@ namespace aspect
                                               :
                                               parameters.global_composition_min_preset[advection_field.compositional_variable]
                                              );
-*/
-    // find out the local minimum/maximum
-    Vector<double> max_solution_per_cell_temp;
-    Vector<double> min_solution_per_cell_temp;
-    max_solution_per_cell_temp.reinit(triangulation.n_active_cells());
-    max_solution_per_cell_temp = (advection_field.is_temperature()
-                                              ?
-                                              parameters.global_temperature_max_preset
-                                              :
-                                              parameters.global_composition_max_preset[advection_field.compositional_variable]
-                                             );
-    min_solution_per_cell_temp.reinit(triangulation.n_active_cells());
-    min_solution_per_cell_temp = (advection_field.is_temperature()
-                                              ?
-                                              parameters.global_temperature_min_preset
-                                              :
-                                              parameters.global_composition_min_preset[advection_field.compositional_variable]
-                                             );
-    typename DoFHandler<dim>::active_cell_iterator
-    cell = dof_handler.begin_active(),
-    endc = dof_handler.end();
-    for (; cell != endc; ++cell)
-    {
-      if (cell->is_locally_owned())
-        for (unsigned int face_no=0; face_no<GeometryInfo<dim>::faces_per_cell; ++face_no)
-          if (cell->at_boundary(face_no) == false)
-          {
-            if (cell->neighbor(face_no)->active()) {
-              max_solution_per_cell_temp[cell->active_cell_index()] = std::max(
-                      max_solution_per_cell_temp[cell->active_cell_index()],
-                      max_solution_per_cell_temp[cell->neighbor(face_no)->active_cell_index()]);
-              min_solution_per_cell_temp[cell->active_cell_index()] = std::min(
-                      min_solution_per_cell_temp[cell->active_cell_index()],
-                      min_solution_per_cell_temp[cell->neighbor(face_no)->active_cell_index()]);
-            }
-            else
-              for (unsigned int l=0; l<cell->neighbor(face_no)->n_children(); l++)
-                if (cell->neighbor(face_no)->child(l)->active()) {
-                  max_solution_per_cell_temp[cell->active_cell_index()] = std::max(
-                          max_solution_per_cell_temp[cell->active_cell_index()],
-                          max_solution_per_cell_temp[cell->neighbor(face_no)->child(l)->active_cell_index()]);
-                  min_solution_per_cell_temp[cell->active_cell_index()] = std::min(
-                          min_solution_per_cell_temp[cell->active_cell_index()],
-                          min_solution_per_cell_temp[cell->neighbor(face_no)->child(l)->active_cell_index()]);
-                }
-          }
-    }
-
     LinearAlgebra::BlockVector distributed_solution (introspection.index_sets.system_partitioning,
                                                      mpi_communicator);
     const unsigned int block_idx = advection_field.block_index(introspection);
@@ -1542,14 +1546,14 @@ namespace aspect
             fe_values_0.reinit (cell);
             fe_values_0[field].get_function_values(solution, values_0);
             //
-            const double max_solution_exact_global = max_solution_per_cell_temp[cell->active_cell_index()];
-            const double min_solution_exact_global = min_solution_per_cell_temp[cell->active_cell_index()];
+            const double max_solution_exact_local = std::min(max_solution_exact_global, max_solution_per_cell[cell->active_cell_index()]);
+            const double min_solution_exact_local = std::max(min_solution_exact_global, min_solution_per_cell[cell->active_cell_index()]);
             //Find the local max and local min
             const double min_solution_local = *std::min_element (values.begin(), values.end());
             const double max_solution_local = *std::max_element (values.begin(), values.end());
             //Find the trouble cell
-            if (min_solution_local < min_solution_exact_global
-                || max_solution_local > max_solution_exact_global)
+            if (min_solution_local < min_solution_exact_local
+                || max_solution_local > max_solution_exact_local)
               {
                 //Compute the cell area and cell solution average
                 double local_area = 0;
@@ -1569,10 +1573,10 @@ namespace aspect
                  * equals to the old solution's cell average.
                  */
                 double theta = std::min<double>
-                               (1, abs((max_solution_exact_global-local_solution_average)
+                               (1, abs((max_solution_exact_local-local_solution_average)
                                        /(max_solution_local-local_solution_average)));
                 theta = std::min<double>
-                        (theta, abs((min_solution_exact_global-local_solution_average)
+                        (theta, abs((min_solution_exact_local-local_solution_average)
                                     /(min_solution_local-local_solution_average)));
                 /* Modify the advection degrees of freedom of the numerical solution.
                  * note that we are using DG elements, so every DoF on a locally owned cell is locally owned;
