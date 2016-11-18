@@ -719,6 +719,14 @@ namespace aspect
                            "'Global composition minimum' are already defined in the .prm file. "
                            "This limiter keeps the discontinuous solution in the range given by "
                            "Global composition maximum' and 'Global composition minimum'.");
+        prm.declare_entry ("Use local limiter for discontinuous composition solution", "false",
+                           Patterns::Bool (),
+                           "Whether to apply the bound preserving limiter as a correction after having "
+                           "the discontinous composition solution. Currently we apply this only to the "
+                           "compositional solution if the 'Global composition maximum' and "
+                           "'Global composition minimum' are already defined in the .prm file. "
+                           "This limiter keeps the discontinuous solution in the range given by "
+                           "Global composition maximum' and 'Global composition minimum'.");
         prm.declare_entry ("Global temperature maximum",
                            boost::lexical_cast<std::string>(std::numeric_limits<double>::max()),
                            Patterns::Double (),
@@ -1039,6 +1047,8 @@ namespace aspect
           = prm.get_bool("Use limiter for discontinuous temperature solution");
         use_limiter_for_discontinuous_composition_solution
           = prm.get_bool("Use limiter for discontinuous composition solution");
+        use_local_limiter_for_discontinuous_composition_solution
+                = prm.get_bool("Use local limiter for discontinuous composition solution");
         global_temperature_max_preset       = prm.get_double ("Global temperature maximum");
         global_temperature_min_preset       = prm.get_double ("Global temperature minimum");
         global_composition_max_preset       = Utilities::string_to_double
