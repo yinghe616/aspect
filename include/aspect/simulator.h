@@ -881,6 +881,7 @@ namespace aspect
        * <code>source/simulator/helper_functions.cc</code>.
        */
       void apply_limiter_to_dg_solutions (const AdvectionField &advection_field);
+      void apply_limiter_to_dg_solutions_local (const AdvectionField &advection_field);
 
       /**
        * Interpolate the given function onto the velocity FE space and write

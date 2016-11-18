@@ -504,7 +504,8 @@ namespace aspect
         (!advection_field.is_temperature()
          && parameters.use_discontinuous_composition_discretization
          && parameters.use_limiter_for_discontinuous_composition_solution))
-      apply_limiter_to_dg_solutions(advection_field);
+      //apply_limiter_to_dg_solutions(advection_field);
+      apply_limiter_to_dg_solutions_local(advection_field);
 
     computing_timer.exit_section();
 

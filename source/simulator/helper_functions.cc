@@ -1320,6 +1320,288 @@ namespace aspect
     // now get back to the original vector
     solution.block(block_idx) = distributed_solution.block(block_idx);
   }
+
+  template <int dim>
+  void Simulator<dim>::apply_limiter_to_dg_solutions_local (const AdvectionField &advection_field)
+  {
+    /*
+     * First setup the quadrature points which are used to find the maximum and minimum solution values at those points.
+     * A quadrature formula that combines all quadrature points constructed as all tensor products of
+     * 1) one dimentional Gauss points; 2) one dimentional Gauss-Lobatto points.
+     * We require that the Gauss-Lobatto points (2) appear in only one direction.
+     * Therefore, possible combination
+     * in 2D: the combinations are 21, 12
+     * in 3D: the combinations are 211, 121, 112
+     */
+    const QGauss<1> quadrature_formula_1 (advection_field.polynomial_degree(introspection)+1);
+    const QGaussLobatto<1> quadrature_formula_2 (advection_field.polynomial_degree(introspection)+1);
+
+    const unsigned int n_q_points_1 = quadrature_formula_1.size();
+    const unsigned int n_q_points_2 = quadrature_formula_2.size();
+    const unsigned int n_q_points   = dim * n_q_points_2 *std::pow(n_q_points_1, dim-1) ;
+
+    std::vector< Point <dim> > quadrature_points (n_q_points);
+
+    switch (dim)
+      {
+        case 2:
+        {
+          //append quadrature points combination 12
+          for ( unsigned int i=0; i < n_q_points_1 ; i++)
+            {
+              const double  x = quadrature_formula_1.point(i)(0);
+              for ( unsigned int j=0; j < n_q_points_2 ; j++)
+                {
+                  const double  y = quadrature_formula_2.point(j)(0);
+                  quadrature_points[i * n_q_points_2+j] = Point<dim>(x,y);
+                }
+            }
+          const unsigned int n_q_points_12 = n_q_points_1 * n_q_points_2;
+          //append quadrature points combination 21
+          for ( unsigned int i=0; i < n_q_points_2 ; i++)
+            {
+              const double  x = quadrature_formula_2.point(i)(0);
+              for ( unsigned int j=0; j < n_q_points_1 ; j++)
+                {
+                  const double  y = quadrature_formula_1.point(j)(0);
+                  quadrature_points[n_q_points_12 + i * n_q_points_1+j ] = Point<dim>(x,y);
+                }
+            }
+          break;
+        }
+
+        case 3:
+        {
+          //append quadrature points combination 121
+          for ( unsigned int i=0; i < n_q_points_1 ; i++)
+            {
+              const double  x = quadrature_formula_1.point(i)(0);
+              for ( unsigned int j=0; j < n_q_points_2 ; j++)
+                {
+                  const double  y = quadrature_formula_2.point(j)(0);
+                  for ( unsigned int k=0; k < n_q_points_1 ; k++)
+                    {
+                      const unsigned int k_index = i * n_q_points_2 * n_q_points_1 + j * n_q_points_2 + k;
+                      const double  z = quadrature_formula_1.point(k)(0);
+                      quadrature_points[k_index] = Point<dim>(x,y,z);
+                    }
+                }
+            }
+          const unsigned int n_q_points_121 = n_q_points_1 * n_q_points_2 * n_q_points_1;
+          //append quadrature points combination 112
+          for ( unsigned int i=0; i < n_q_points_1 ; i++)
+            {
+              const double  x = quadrature_formula_1.point(i)(0);
+              for ( unsigned int j=0; j < n_q_points_1 ; j++)
+                {
+                  const double y = quadrature_formula_1.point(j)(0);
+                  for ( unsigned int k=0; k < n_q_points_2 ; k++)
+                    {
+                      const unsigned int k_index =
+                        n_q_points_121 + i * n_q_points_1 * n_q_points_2 + j * n_q_points_2 + k;
+                      const double  z = quadrature_formula_2.point(k)(0);
+                      quadrature_points[k_index] = Point<dim>(x,y,z);
+                    }
+                }
+            }
+          //append quadrature points combination 211
+          for ( unsigned int i=0; i < n_q_points_2 ; i++)
+            {
+              const double  x = quadrature_formula_2.point(i)(0);
+              for ( unsigned int j=0; j < n_q_points_1 ; j++)
+                {
+                  const double  y = quadrature_formula_1.point(j)(0);
+                  for ( unsigned int k=0; k < n_q_points_1 ; k++)
+                    {
+                      const unsigned int k_index =
+                        2 * n_q_points_121 + i * n_q_points_2 * n_q_points_1 + j * n_q_points_1 + k;
+                      const double  z = quadrature_formula_1.point(k)(0);
+                      quadrature_points[k_index] = Point<dim>(x,y,z);
+                    }
+                }
+            }
+          break;
+        }
+
+        default:
+          Assert (false, ExcNotImplemented());
+      }
+
+
+    Quadrature<dim> quadrature_formula(quadrature_points);
+
+    // Quadrature rules only used for the numerical integration for better accuracy
+    const QGauss<dim> quadrature_formula_0 (advection_field.polynomial_degree(introspection)+1);
+
+    const unsigned int n_q_points_0 = quadrature_formula_0.size();
+
+    // fe values for points evalution
+    FEValues<dim> fe_values (*mapping,
+                             finite_element,
+                             quadrature_formula,
+                             update_values   |
+                             update_quadrature_points);
+    std::vector<double> values (n_q_points);
+    // fe values for numerical integration, with a number of quadrature points
+    // that is equal to 1/dim times the number of total points above
+    FEValues<dim> fe_values_0 (*mapping,
+                               finite_element,
+                               quadrature_formula_0,
+                               update_values   |
+                               update_quadrature_points |
+                               update_JxW_values);
+    std::vector<double> values_0 (n_q_points_0);
+
+    const FEValuesExtractors::Scalar field
+      = (advection_field.is_temperature()
+         ?
+         introspection.extractors.temperature
+         :
+         introspection.extractors.compositional_fields[advection_field.compositional_variable]
+        );
+/*
+    const double max_solution_exact_global = (advection_field.is_temperature()
+                                              ?
+                                              parameters.global_temperature_max_preset
+                                              :
+                                              parameters.global_composition_max_preset[advection_field.compositional_variable]
+                                             );
+    const double min_solution_exact_global = (advection_field.is_temperature()
+                                              ?
+                                              parameters.global_temperature_min_preset
+                                              :
+                                              parameters.global_composition_min_preset[advection_field.compositional_variable]
+                                             );
+*/
+    // find out the local minimum/maximum
+    Vector<double> max_solution_per_cell_temp;
+    Vector<double> min_solution_per_cell_temp;
+    max_solution_per_cell_temp.reinit(triangulation.n_active_cells());
+    max_solution_per_cell_temp = (advection_field.is_temperature()
+                                              ?
+                                              parameters.global_temperature_max_preset
+                                              :
+                                              parameters.global_composition_max_preset[advection_field.compositional_variable]
+                                             );
+    min_solution_per_cell_temp.reinit(triangulation.n_active_cells());
+    min_solution_per_cell_temp = (advection_field.is_temperature()
+                                              ?
+                                              parameters.global_temperature_min_preset
+                                              :
+                                              parameters.global_composition_min_preset[advection_field.compositional_variable]
+                                             );
+    typename DoFHandler<dim>::active_cell_iterator
+    cell = dof_handler.begin_active(),
+    endc = dof_handler.end();
+    for (; cell != endc; ++cell)
+    {
+      if (cell->is_locally_owned())
+        for (unsigned int face_no=0; face_no<GeometryInfo<dim>::faces_per_cell; ++face_no)
+          if (cell->at_boundary(face_no) == false)
+          {
+            if (cell->neighbor(face_no)->active()) {
+              max_solution_per_cell_temp[cell->active_cell_index()] = std::max(
+                      max_solution_per_cell_temp[cell->active_cell_index()],
+                      max_solution_per_cell_temp[cell->neighbor(face_no)->active_cell_index()]);
+              min_solution_per_cell_temp[cell->active_cell_index()] = std::min(
+                      min_solution_per_cell_temp[cell->active_cell_index()],
+                      min_solution_per_cell_temp[cell->neighbor(face_no)->active_cell_index()]);
+            }
+            else
+              for (unsigned int l=0; l<cell->neighbor(face_no)->n_children(); l++)
+                if (cell->neighbor(face_no)->child(l)->active()) {
+                  max_solution_per_cell_temp[cell->active_cell_index()] = std::max(
+                          max_solution_per_cell_temp[cell->active_cell_index()],
+                          max_solution_per_cell_temp[cell->neighbor(face_no)->child(l)->active_cell_index()]);
+                  min_solution_per_cell_temp[cell->active_cell_index()] = std::min(
+                          min_solution_per_cell_temp[cell->active_cell_index()],
+                          min_solution_per_cell_temp[cell->neighbor(face_no)->child(l)->active_cell_index()]);
+                }
+          }
+    }
+
+    LinearAlgebra::BlockVector distributed_solution (introspection.index_sets.system_partitioning,
+                                                     mpi_communicator);
+    const unsigned int block_idx = advection_field.block_index(introspection);
+    distributed_solution.block(block_idx) = solution.block(block_idx);
+
+    std::vector<types::global_dof_index> local_dof_indices (finite_element.dofs_per_cell);
+
+    //typename DoFHandler<dim>::active_cell_iterator
+    cell = dof_handler.begin_active();
+    endc = dof_handler.end();
+    for (; cell != endc; ++cell)
+      {
+        if (cell->is_locally_owned())
+          {
+            cell->get_dof_indices (local_dof_indices);
+            //used to find the maximum, minimum
+            fe_values.reinit (cell);
+            fe_values[field].get_function_values(solution, values);
+            //used for the numerical integration
+            fe_values_0.reinit (cell);
+            fe_values_0[field].get_function_values(solution, values_0);
+            //
+            const double max_solution_exact_global = max_solution_per_cell_temp[cell->active_cell_index()];
+            const double min_solution_exact_global = min_solution_per_cell_temp[cell->active_cell_index()];
+            //Find the local max and local min
+            const double min_solution_local = *std::min_element (values.begin(), values.end());
+            const double max_solution_local = *std::max_element (values.begin(), values.end());
+            //Find the trouble cell
+            if (min_solution_local < min_solution_exact_global
+                || max_solution_local > max_solution_exact_global)
+              {
+                //Compute the cell area and cell solution average
+                double local_area = 0;
+                double local_solution_average = 0;
+                for (unsigned int q = 0; q < n_q_points_0; ++q)
+                  {
+                    local_area += fe_values_0.JxW(q);
+                    local_solution_average += values_0[q]*fe_values_0.JxW(q);
+                  }
+                local_solution_average /= local_area;
+                /*
+                 * Define theta: a scaling constant used to correct the old solution by the formula
+                 *   new_value = theta * (old_value-old_solution_cell_average)+old_solution_cell_average
+                 * where theta \in [0,1] defined as below.
+                 * After the correction, the new solution does not exceed the user-given
+                 * exact global maximum/minimum values. Meanwhile, the new solution's cell average
+                 * equals to the old solution's cell average.
+                 */
+                double theta = std::min<double>
+                               (1, abs((max_solution_exact_global-local_solution_average)
+                                       /(max_solution_local-local_solution_average)));
+                theta = std::min<double>
+                        (theta, abs((min_solution_exact_global-local_solution_average)
+                                    /(min_solution_local-local_solution_average)));
+                /* Modify the advection degrees of freedom of the numerical solution.
+                 * note that we are using DG elements, so every DoF on a locally owned cell is locally owned;
+                 * this means that we do not need to check whether the 'distributed_solution' vector actually
+                 *  stores the element we read from/write to here.
+                 */
+                for (unsigned int j = 0;
+                     j < finite_element.base_element(advection_field.base_element(introspection)).dofs_per_cell;
+                     ++j)
+                  {
+                    const unsigned int support_point_index = finite_element.component_to_system_index(
+                                                               (advection_field.is_temperature()
+                                                                ?
+                                                                introspection.component_indices.temperature
+                                                                :
+                                                                introspection.component_indices.compositional_fields[advection_field.compositional_variable]
+                                                               ),
+                                                               /*dof index within component=*/ j);
+                    const double solution_value = solution(local_dof_indices[support_point_index]);
+                    const double limited_solution_value = theta * (solution_value-local_solution_average) + local_solution_average;
+                    distributed_solution(local_dof_indices[support_point_index]) = limited_solution_value;
+                  }
+              }
+          }
+      }
+    distributed_solution.compress(VectorOperation::insert);
+    // now get back to the original vector
+    solution.block(block_idx) = distributed_solution.block(block_idx);
+  }
 }
 // explicit instantiation of the functions we implement in this file
 namespace aspect
@@ -1340,7 +1622,7 @@ namespace aspect
   template double Simulator<dim>::compute_initial_stokes_residual(); \
   template bool Simulator<dim>::stokes_matrix_depends_on_solution() const; \
   template void Simulator<dim>::interpolate_onto_velocity_system(const TensorFunction<1,dim> &func, LinearAlgebra::Vector &vec);\
-  template void Simulator<dim>::apply_limiter_to_dg_solutions(const AdvectionField &advection_field);
-
+  template void Simulator<dim>::apply_limiter_to_dg_solutions(const AdvectionField &advection_field);\
+  template void Simulator<dim>::apply_limiter_to_dg_solutions_local(const AdvectionField &advection_field);
   ASPECT_INSTANTIATE(INSTANTIATE)
 }
