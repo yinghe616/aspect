@@ -1483,6 +1483,8 @@ namespace aspect
         min_solution_per_cell_temp[cell->active_cell_index()] = *std::max_element (values.begin(), values.end());
       }
     }
+    max_solution_per_cell = max_solution_per_cell_temp;
+    min_solution_per_cell = min_solution_per_cell_temp;
 
     cell = dof_handler.begin_active();
     endc = dof_handler.end();
@@ -1494,20 +1496,20 @@ namespace aspect
           {
             if (cell->neighbor(face_no)->active()) {
               max_solution_per_cell[cell->active_cell_index()] = std::max(
-                      max_solution_per_cell_temp[cell->active_cell_index()],
+                      max_solution_per_cell[cell->active_cell_index()],
                       max_solution_per_cell_temp[cell->neighbor(face_no)->active_cell_index()]);
               min_solution_per_cell[cell->active_cell_index()] = std::min(
-                      min_solution_per_cell_temp[cell->active_cell_index()],
+                      min_solution_per_cell[cell->active_cell_index()],
                       min_solution_per_cell_temp[cell->neighbor(face_no)->active_cell_index()]);
             }
             else
               for (unsigned int l=0; l<cell->neighbor(face_no)->n_children(); l++)
                 if (cell->neighbor(face_no)->child(l)->active()) {
                   max_solution_per_cell[cell->active_cell_index()] = std::max(
-                          max_solution_per_cell_temp[cell->active_cell_index()],
+                          max_solution_per_cell[cell->active_cell_index()],
                           max_solution_per_cell_temp[cell->neighbor(face_no)->child(l)->active_cell_index()]);
                   min_solution_per_cell[cell->active_cell_index()] = std::min(
-                          min_solution_per_cell_temp[cell->active_cell_index()],
+                          min_solution_per_cell[cell->active_cell_index()],
                           min_solution_per_cell_temp[cell->neighbor(face_no)->child(l)->active_cell_index()]);
                 }
           }
