@@ -7,9 +7,10 @@
 
 set Dimension                              = 2
 set Start time                             = 0
-set End time                               = 1e6
+set End time                               = 1e7
 set Use years in output instead of seconds = true
-set CFL number                             = .5
+set CFL number                             = .1
+set Output directory                       = output_global_limiter
 
 subsection Geometry model
   set Model name = box
@@ -97,7 +98,13 @@ end
 ############### Parameters describing what to do with the solution
 
 subsection Postprocess
-  set List of postprocessors = velocity statistics, composition statistics
+  set List of postprocessors = basic statistics, visualization, heat flux statistics, velocity statistics, composition statistics
+  subsection Visualization
+    set List of output variables = artificial viscosity, density, viscosity
+    set Output format                 = vtu
+    set Number of grouped files       = 1
+    set Time between graphical output = 1e5
+  end
 end
 
 subsection Discretization

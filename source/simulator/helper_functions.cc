@@ -1442,6 +1442,17 @@ namespace aspect
                              update_values   |
                              update_quadrature_points);
     std::vector<double> values (n_q_points);
+    // use to determine the inflow/outflow direction
+    const QGauss<dim-1> face_quadrature (advection_field.polynomial_degree(introspection)+1);
+    const unsigned int n_q_points_face = face_quadrature.size();
+    FEFaceValues<dim> fe_face_values (*mapping,
+                             finite_element,
+                             face_quadrature,
+                             update_values   |
+                             update_quadrature_points|
+                             update_normal_vectors | 
+                             update_JxW_values);
+    std::vector<Tensor<1,dim> > velocity_face_values(n_q_points_face);
     // fe values for numerical integration, with a number of quadrature points
     // that is equal to 1/dim times the number of total points above
     FEValues<dim> fe_values_0 (*mapping,
@@ -1460,17 +1471,17 @@ namespace aspect
          introspection.extractors.compositional_fields[advection_field.compositional_variable]
         );
 
-    // find out the local minimum/maximum
-    Vector<double> max_solution_per_cell;
-    Vector<double> min_solution_per_cell;
-    Vector<double> max_solution_per_cell_temp;
-    Vector<double> min_solution_per_cell_temp;
-    max_solution_per_cell.reinit(triangulation.n_active_cells());
-    max_solution_per_cell_temp.reinit(triangulation.n_active_cells());
+    // find out the local minimum/maximum of the old solutions
+    Vector<double> max_old_solution_per_cell;
+    Vector<double> min_old_solution_per_cell;
+    Vector<double> max_old_solution_per_cell_temp;
+    Vector<double> min_old_solution_per_cell_temp;
+    max_old_solution_per_cell.reinit(triangulation.n_active_cells());
+    max_old_solution_per_cell_temp.reinit(triangulation.n_active_cells());
 
-    min_solution_per_cell.reinit(triangulation.n_active_cells());
-    min_solution_per_cell_temp.reinit(triangulation.n_active_cells());
-
+    min_old_solution_per_cell.reinit(triangulation.n_active_cells());
+    min_old_solution_per_cell_temp.reinit(triangulation.n_active_cells());
+// final the cell max/min
     typename DoFHandler<dim>::active_cell_iterator
     cell = dof_handler.begin_active(),
     endc = dof_handler.end();
@@ -1478,14 +1489,15 @@ namespace aspect
     for (; cell != endc; ++cell) {
       if (cell->is_locally_owned()) {
         fe_values.reinit(cell);
-        fe_values[field].get_function_values(solution, values);
-        max_solution_per_cell_temp[cell->active_cell_index()] = *std::min_element (values.begin(), values.end());
-        min_solution_per_cell_temp[cell->active_cell_index()] = *std::max_element (values.begin(), values.end());
+        fe_values[field].get_function_values(old_solution, values);
+        min_old_solution_per_cell_temp[cell->active_cell_index()] = *std::min_element (values.begin(), values.end());
+        max_old_solution_per_cell_temp[cell->active_cell_index()] = *std::max_element (values.begin(), values.end());
       }
     }
-    max_solution_per_cell = max_solution_per_cell_temp;
-    min_solution_per_cell = min_solution_per_cell_temp;
+    max_old_solution_per_cell = max_old_solution_per_cell_temp;
+    min_old_solution_per_cell = min_old_solution_per_cell_temp;
 
+// final the cell max/min compare to its neighbors
     cell = dof_handler.begin_active();
     endc = dof_handler.end();
     for (; cell != endc; ++cell)
@@ -1494,24 +1506,75 @@ namespace aspect
         for (unsigned int face_no=0; face_no<GeometryInfo<dim>::faces_per_cell; ++face_no)
           if (cell->at_boundary(face_no) == false)
           {
-            if (cell->neighbor(face_no)->active()) {
-              max_solution_per_cell[cell->active_cell_index()] = std::max(
-                      max_solution_per_cell[cell->active_cell_index()],
-                      max_solution_per_cell_temp[cell->neighbor(face_no)->active_cell_index()]);
-              min_solution_per_cell[cell->active_cell_index()] = std::min(
-                      min_solution_per_cell[cell->active_cell_index()],
-                      min_solution_per_cell_temp[cell->neighbor(face_no)->active_cell_index()]);
+            fe_face_values.reinit (cell, face_no);
+            fe_face_values[introspection.extractors.velocities].get_function_values (old_solution,
+                                                                            velocity_face_values);
+            bool inflow = false;
+            for (unsigned int q=0; q<n_q_points_face; ++q)
+                if (velocity_face_values[q]*fe_face_values.normal_vector(q) < 0)
+                  inflow = true;
+            if (inflow)
+            {
+              if (cell->neighbor(face_no)->active()) {
+              max_old_solution_per_cell[cell->active_cell_index()] = std::max(
+                      max_old_solution_per_cell[cell->active_cell_index()],
+                      max_old_solution_per_cell_temp[cell->neighbor(face_no)->active_cell_index()]);
+              min_old_solution_per_cell[cell->active_cell_index()] = std::min(
+                      min_old_solution_per_cell[cell->active_cell_index()],
+                      min_old_solution_per_cell_temp[cell->neighbor(face_no)->active_cell_index()]);
             }
             else
               for (unsigned int l=0; l<cell->neighbor(face_no)->n_children(); l++)
                 if (cell->neighbor(face_no)->child(l)->active()) {
-                  max_solution_per_cell[cell->active_cell_index()] = std::max(
-                          max_solution_per_cell[cell->active_cell_index()],
-                          max_solution_per_cell_temp[cell->neighbor(face_no)->child(l)->active_cell_index()]);
-                  min_solution_per_cell[cell->active_cell_index()] = std::min(
-                          min_solution_per_cell[cell->active_cell_index()],
-                          min_solution_per_cell_temp[cell->neighbor(face_no)->child(l)->active_cell_index()]);
+                  max_old_solution_per_cell[cell->active_cell_index()] = std::max(
+                          max_old_solution_per_cell[cell->active_cell_index()],
+                          max_old_solution_per_cell_temp[cell->neighbor(face_no)->child(l)->active_cell_index()]);
+                  min_old_solution_per_cell[cell->active_cell_index()] = std::min(
+                          min_old_solution_per_cell[cell->active_cell_index()],
+                          min_old_solution_per_cell_temp[cell->neighbor(face_no)->child(l)->active_cell_index()]);
                 }
+            }
+          }
+    }
+    max_old_solution_per_cell_temp = max_old_solution_per_cell;
+    min_old_solution_per_cell_temp = min_old_solution_per_cell;
+// final the cell max/min compare to its neighbors and neighbors' neighbors
+    cell = dof_handler.begin_active();
+    endc = dof_handler.end();
+    for (; cell != endc; ++cell)
+    {
+      if (cell->is_locally_owned())
+        for (unsigned int face_no=0; face_no<GeometryInfo<dim>::faces_per_cell; ++face_no)
+          if (cell->at_boundary(face_no) == false)
+          {
+            fe_face_values.reinit (cell, face_no);
+            fe_face_values[introspection.extractors.velocities].get_function_values (old_solution,
+                                                                            velocity_face_values);
+            bool inflow = false;
+            for (unsigned int q=0; q<n_q_points_face; ++q)
+                if (velocity_face_values[q]*fe_face_values.normal_vector(q) < 0)
+                  inflow = true;
+            if (inflow)
+            {
+            if (cell->neighbor(face_no)->active()) {
+              max_old_solution_per_cell[cell->active_cell_index()] = std::max(
+                      max_old_solution_per_cell[cell->active_cell_index()],
+                      max_old_solution_per_cell_temp[cell->neighbor(face_no)->active_cell_index()]);
+              min_old_solution_per_cell[cell->active_cell_index()] = std::min(
+                      min_old_solution_per_cell[cell->active_cell_index()],
+                      min_old_solution_per_cell_temp[cell->neighbor(face_no)->active_cell_index()]);
+            }
+            else
+              for (unsigned int l=0; l<cell->neighbor(face_no)->n_children(); l++)
+                if (cell->neighbor(face_no)->child(l)->active()) {
+                  max_old_solution_per_cell[cell->active_cell_index()] = std::max(
+                          max_old_solution_per_cell[cell->active_cell_index()],
+                          max_old_solution_per_cell_temp[cell->neighbor(face_no)->child(l)->active_cell_index()]);
+                  min_old_solution_per_cell[cell->active_cell_index()] = std::min(
+                          min_old_solution_per_cell[cell->active_cell_index()],
+                          min_old_solution_per_cell_temp[cell->neighbor(face_no)->child(l)->active_cell_index()]);
+                }
+            }
           }
     }
     const double max_solution_exact_global = (advection_field.is_temperature()
@@ -1548,8 +1611,8 @@ namespace aspect
             fe_values_0.reinit (cell);
             fe_values_0[field].get_function_values(solution, values_0);
             //
-            const double max_solution_exact_local = std::min(max_solution_exact_global, max_solution_per_cell[cell->active_cell_index()]);
-            const double min_solution_exact_local = std::max(min_solution_exact_global, min_solution_per_cell[cell->active_cell_index()]);
+            const double max_solution_exact_local = std::min(max_solution_exact_global, max_old_solution_per_cell[cell->active_cell_index()]);
+            const double min_solution_exact_local = std::max(min_solution_exact_global, min_old_solution_per_cell[cell->active_cell_index()]);
             //Find the local max and local min
             const double min_solution_local = *std::min_element (values.begin(), values.end());
             const double max_solution_local = *std::max_element (values.begin(), values.end());
