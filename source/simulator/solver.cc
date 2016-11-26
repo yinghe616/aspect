@@ -499,16 +499,21 @@ namespace aspect
 
     if ((advection_field.is_temperature()
          && parameters.use_discontinuous_temperature_discretization
-         && parameters.use_limiter_for_discontinuous_temperature_solution)
+         && (parameters.use_limiter_for_discontinuous_temperature_solution ||
+             parameters.use_local_limiter_for_discontinuous_temperature_solution))
         ||
         (!advection_field.is_temperature()
          && parameters.use_discontinuous_composition_discretization
          && (parameters.use_limiter_for_discontinuous_composition_solution ||
                                  parameters.use_local_limiter_for_discontinuous_composition_solution))) {
-        if (parameters.use_local_limiter_for_discontinuous_composition_solution)
+        if (parameters.use_local_limiter_for_discontinuous_composition_solution && !advection_field.is_temperature())
             apply_limiter_to_dg_solutions_local(advection_field);
-        else if (parameters.use_limiter_for_discontinuous_composition_solution)
+        else if (parameters.use_limiter_for_discontinuous_composition_solution && !advection_field.is_temperature())
             apply_limiter_to_dg_solutions(advection_field);
+        if (parameters.use_limiter_for_discontinuous_temperature_solution && advection_field.is_temperature())
+            apply_limiter_to_dg_solutions(advection_field);
+        else if (parameters.use_local_limiter_for_discontinuous_temperature_solution && advection_field.is_temperature())
+            apply_limiter_to_dg_solutions_local(advection_field);
     }
     computing_timer.exit_section();
 

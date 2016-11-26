@@ -1490,6 +1490,7 @@ namespace aspect
       if (cell->is_locally_owned()) {
         fe_values.reinit(cell);
         fe_values[field].get_function_values(old_solution, values);
+        //fe_values[field].get_function_values(solution, values);
         min_old_solution_per_cell_temp[cell->active_cell_index()] = *std::min_element (values.begin(), values.end());
         max_old_solution_per_cell_temp[cell->active_cell_index()] = *std::max_element (values.begin(), values.end());
       }
@@ -1506,14 +1507,14 @@ namespace aspect
         for (unsigned int face_no=0; face_no<GeometryInfo<dim>::faces_per_cell; ++face_no)
           if (cell->at_boundary(face_no) == false)
           {
-            fe_face_values.reinit (cell, face_no);
-            fe_face_values[introspection.extractors.velocities].get_function_values (old_solution,
-                                                                            velocity_face_values);
-            bool inflow = false;
-            for (unsigned int q=0; q<n_q_points_face; ++q)
-                if (velocity_face_values[q]*fe_face_values.normal_vector(q) < 0)
-                  inflow = true;
-            if (inflow)
+            //fe_face_values.reinit (cell, face_no);
+            //fe_face_values[introspection.extractors.velocities].get_function_values (old_solution,
+            //                                                                velocity_face_values);
+            //bool inflow = true;
+         //   for (unsigned int q=0; q<n_q_points_face; ++q)
+           //     if (velocity_face_values[q]*fe_face_values.normal_vector(q) < 0)
+             //     inflow = true;
+            //if (inflow)
             {
               if (cell->neighbor(face_no)->active()) {
               max_old_solution_per_cell[cell->active_cell_index()] = std::max(
@@ -1539,6 +1540,7 @@ namespace aspect
     max_old_solution_per_cell_temp = max_old_solution_per_cell;
     min_old_solution_per_cell_temp = min_old_solution_per_cell;
 // final the cell max/min compare to its neighbors and neighbors' neighbors
+/*
     cell = dof_handler.begin_active();
     endc = dof_handler.end();
     for (; cell != endc; ++cell)
@@ -1550,11 +1552,11 @@ namespace aspect
             fe_face_values.reinit (cell, face_no);
             fe_face_values[introspection.extractors.velocities].get_function_values (old_solution,
                                                                             velocity_face_values);
-            bool inflow = false;
-            for (unsigned int q=0; q<n_q_points_face; ++q)
-                if (velocity_face_values[q]*fe_face_values.normal_vector(q) < 0)
-                  inflow = true;
-            if (inflow)
+            //bool inflow = true;
+            //for (unsigned int q=0; q<n_q_points_face; ++q)
+              //  if (velocity_face_values[q]*fe_face_values.normal_vector(q) < 0)
+                //  inflow = true;
+           // if (inflow)
             {
             if (cell->neighbor(face_no)->active()) {
               max_old_solution_per_cell[cell->active_cell_index()] = std::max(
@@ -1577,6 +1579,7 @@ namespace aspect
             }
           }
     }
+    */
     const double max_solution_exact_global = (advection_field.is_temperature()
                                               ?
                                               parameters.global_temperature_max_preset

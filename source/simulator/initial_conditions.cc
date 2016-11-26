@@ -91,7 +91,8 @@ namespace aspect
 
         std::vector<types::global_dof_index> local_dof_indices (finite_element.dofs_per_cell);
 
-#if DEAL_II_VERSION_GTE(8,5,0)
+/*#if DEAL_II_VERSION_GTE(8,5,0)
+
         const VectorFunctionFromScalarFunctionObject<dim, double> &advf_init_function =
           (advf.is_temperature()
            ?
@@ -144,7 +145,7 @@ namespace aspect
                       }
                   }
               }
-#else
+#else */
         for (typename DoFHandler<dim>::active_cell_iterator cell = dof_handler.begin_active();
              cell != dof_handler.end(); ++cell)
           if (cell->is_locally_owned())
@@ -163,9 +164,9 @@ namespace aspect
                   const double value =
                     (advf.is_temperature()
                      ?
-                     initial_conditions->initial_temperature(fe_values.quadrature_point(i))
+                     initial_conditions->initial_temperature(fe_values.quadrature_point(2))
                      :
-                     compositional_initial_conditions->initial_composition(fe_values.quadrature_point(i),n-1));
+                     compositional_initial_conditions->initial_composition(fe_values.quadrature_point(2),n-1));
                   initial_solution(local_dof_indices[system_local_dof]) = value;
 
                   // if it is specified in the parameter file that the sum of all compositional fields
@@ -185,7 +186,7 @@ namespace aspect
 
                 }
             }
-#endif
+//#endif
 
         initial_solution.compress(VectorOperation::insert);
 

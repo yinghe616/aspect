@@ -719,6 +719,14 @@ namespace aspect
                            "'Global composition minimum' are already defined in the .prm file. "
                            "This limiter keeps the discontinuous solution in the range given by "
                            "Global composition maximum' and 'Global composition minimum'.");
+        prm.declare_entry ("Use local limiter for discontinuous temperature solution", "false",
+                           Patterns::Bool (),
+                           "Whether to apply the bound preserving limiter as a correction after having "
+                           "the discontinous composition solution. Currently we apply this only to the "
+                           "compositional solution if the 'Global composition maximum' and "
+                           "'Global composition minimum' are already defined in the .prm file. "
+                           "This limiter keeps the discontinuous solution in the range given by "
+                           "Global composition maximum' and 'Global composition minimum'.");
         prm.declare_entry ("Use local limiter for discontinuous composition solution", "false",
                            Patterns::Bool (),
                            "Whether to apply the bound preserving limiter as a correction after having "
@@ -1047,6 +1055,8 @@ namespace aspect
           = prm.get_bool("Use limiter for discontinuous temperature solution");
         use_limiter_for_discontinuous_composition_solution
           = prm.get_bool("Use limiter for discontinuous composition solution");
+        use_local_limiter_for_discontinuous_temperature_solution
+                = prm.get_bool("Use local limiter for discontinuous temperature solution");
         use_local_limiter_for_discontinuous_composition_solution
                 = prm.get_bool("Use local limiter for discontinuous composition solution");
         global_temperature_max_preset       = prm.get_double ("Global temperature maximum");
@@ -1148,8 +1158,7 @@ namespace aspect
 
       // global_composition_max_preset.size() and global_composition_min_preset.size() are obtained early than
       // n_compositional_fields. Therefore, we can only check if their sizes are the same here.
-      if (use_limiter_for_discontinuous_temperature_solution
-          || use_limiter_for_discontinuous_composition_solution)
+      if (use_limiter_for_discontinuous_composition_solution)
         AssertThrow ((global_composition_max_preset.size() == (n_compositional_fields)
                       && global_composition_min_preset.size() == (n_compositional_fields)),
                      ExcMessage ("The number of multiple 'Global composition maximum' values "
