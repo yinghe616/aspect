@@ -164,7 +164,7 @@ namespace aspect
                   const double value =
                     (advf.is_temperature()
                      ?
-                     initial_conditions->initial_temperature(fe_values.quadrature_point(2))
+                     initial_conditions->initial_temperature(fe_values.quadrature_point(i))
                      :
                      compositional_initial_conditions->initial_composition(fe_values.quadrature_point(2),n-1));
                   initial_solution(local_dof_indices[system_local_dof]) = value;
