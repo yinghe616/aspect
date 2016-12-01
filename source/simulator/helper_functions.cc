@@ -1539,8 +1539,7 @@ namespace aspect
     }
     max_old_solution_per_cell_temp = max_old_solution_per_cell;
     min_old_solution_per_cell_temp = min_old_solution_per_cell;
-// final the cell max/min compare to its neighbors and neighbors' neighbors
-/*
+// find the cell max/min compare to its neighbors and neighbors' neighbors
     cell = dof_handler.begin_active();
     endc = dof_handler.end();
     for (; cell != endc; ++cell)
@@ -1579,7 +1578,6 @@ namespace aspect
             }
           }
     }
-    */
     const double max_solution_exact_global = (advection_field.is_temperature()
                                               ?
                                               parameters.global_temperature_max_preset

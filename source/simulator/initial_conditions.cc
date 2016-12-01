@@ -160,15 +160,26 @@ namespace aspect
                   const unsigned int system_local_dof
                     = finite_element.component_to_system_index(advf.component_index(introspection),
                                                                /*dof index within component=*/i);
-
+                  if (advf.is_discontinuous(introspection))
+                  {
+                  const double value =
+                    (advf.is_temperature()
+                     ?
+                     initial_conditions->initial_temperature(fe_values.quadrature_point(1))
+                     :
+                     compositional_initial_conditions->initial_composition(fe_values.quadrature_point(1),n-1));
+                  initial_solution(local_dof_indices[system_local_dof]) = value;
+                   }
+                  else
+                  {
                   const double value =
                     (advf.is_temperature()
                      ?
                      initial_conditions->initial_temperature(fe_values.quadrature_point(i))
                      :
-                     compositional_initial_conditions->initial_composition(fe_values.quadrature_point(2),n-1));
+                     compositional_initial_conditions->initial_composition(fe_values.quadrature_point(i),n-1));
                   initial_solution(local_dof_indices[system_local_dof]) = value;
-
+                  }
                   // if it is specified in the parameter file that the sum of all compositional fields
                   // must not exceed one, this should be checked
                   if (parameters.normalized_fields.size()>0 && n == 1)
