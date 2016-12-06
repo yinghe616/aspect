@@ -1672,6 +1672,247 @@ namespace aspect
     // now get back to the original vector
     solution.block(block_idx) = distributed_solution.block(block_idx);
   }
+
+  template <int dim>
+  void Simulator<dim>::apply_slope_limiter_to_dg_solutions (const AdvectionField &advection_field)
+  {
+
+    // Quadrature rules only used for the numerical integration for better accuracy
+    const QGauss<dim> quadrature_formula (advection_field.polynomial_degree(introspection)+1);
+    const unsigned int n_q_points = quadrature_formula.size();
+
+    // fe values for points evalution
+    FEValues<dim> fe_values (*mapping,
+                             finite_element,
+                             quadrature_formula,
+                             update_values   |
+                             update_normal_vectors | 
+                             update_quadrature_points);
+    std::vector<double> values (n_q_points);
+
+    // use to determine the inflow/outflow direction
+    const QGauss<dim-1> face_quadrature (advection_field.polynomial_degree(introspection)+1);
+    const unsigned int n_q_points_face = face_quadrature.size();
+    FEFaceValues<dim> fe_face_values (*mapping,
+                             finite_element,
+                             face_quadrature,
+                             update_values   |
+                             update_quadrature_points|
+                             update_normal_vectors | 
+                             update_JxW_values);
+    std::vector<Tensor<1,dim> > velocity_face_values(n_q_points_face);
+
+    const FEValuesExtractors::Scalar field
+      = (advection_field.is_temperature()
+         ?
+         introspection.extractors.temperature
+         :
+         introspection.extractors.compositional_fields[advection_field.compositional_variable]
+        );
+
+    // find out the local minimum/maximum of the old solutions
+    Vector<double> max_old_solution_per_cell;
+    Vector<double> min_old_solution_per_cell;
+    Vector<double> max_old_solution_per_cell_temp;
+    Vector<double> min_old_solution_per_cell_temp;
+    Vector<double> solution_cell_average;
+    max_old_solution_per_cell.reinit(triangulation.n_active_cells());
+    max_old_solution_per_cell_temp.reinit(triangulation.n_active_cells());
+    min_old_solution_per_cell.reinit(triangulation.n_active_cells());
+    min_old_solution_per_cell_temp.reinit(triangulation.n_active_cells());
+    solution_cell_average.reinit(triangulation.n_active_cells());
+
+// final the cell max/min
+    typename DoFHandler<dim>::active_cell_iterator
+    cell = dof_handler.begin_active(),
+    endc = dof_handler.end();
+
+    for (; cell != endc; ++cell) {
+      if (cell->is_locally_owned()) {
+        fe_values.reinit(cell);
+        fe_values[field].get_function_values(old_solution, values);
+        //fe_values[field].get_function_values(solution, values);
+        min_old_solution_per_cell_temp[cell->active_cell_index()] = *std::min_element (values.begin(), values.end());
+        max_old_solution_per_cell_temp[cell->active_cell_index()] = *std::max_element (values.begin(), values.end());
+      }
+    }
+    max_old_solution_per_cell = max_old_solution_per_cell_temp;
+    min_old_solution_per_cell = min_old_solution_per_cell_temp;
+
+// final the cell max/min compare to its neighbors
+    cell = dof_handler.begin_active();
+    endc = dof_handler.end();
+    for (; cell != endc; ++cell)
+    {
+      if (cell->is_locally_owned())
+        for (unsigned int face_no=0; face_no<GeometryInfo<dim>::faces_per_cell; ++face_no)
+          if (cell->at_boundary(face_no) == false)
+          {
+            //fe_face_values.reinit (cell, face_no);
+            //fe_face_values[introspection.extractors.velocities].get_function_values (old_solution,
+            //                                                                velocity_face_values);
+            //bool inflow = true;
+         //   for (unsigned int q=0; q<n_q_points_face; ++q)
+           //     if (velocity_face_values[q]*fe_face_values.normal_vector(q) < 0)
+             //     inflow = true;
+            //if (inflow)
+            {
+              if (cell->neighbor(face_no)->active()) {
+              max_old_solution_per_cell[cell->active_cell_index()] = std::max(
+                      max_old_solution_per_cell[cell->active_cell_index()],
+                      max_old_solution_per_cell_temp[cell->neighbor(face_no)->active_cell_index()]);
+              min_old_solution_per_cell[cell->active_cell_index()] = std::min(
+                      min_old_solution_per_cell[cell->active_cell_index()],
+                      min_old_solution_per_cell_temp[cell->neighbor(face_no)->active_cell_index()]);
+            }
+            else
+              for (unsigned int l=0; l<cell->neighbor(face_no)->n_children(); l++)
+                if (cell->neighbor(face_no)->child(l)->active()) {
+                  max_old_solution_per_cell[cell->active_cell_index()] = std::max(
+                          max_old_solution_per_cell[cell->active_cell_index()],
+                          max_old_solution_per_cell_temp[cell->neighbor(face_no)->child(l)->active_cell_index()]);
+                  min_old_solution_per_cell[cell->active_cell_index()] = std::min(
+                          min_old_solution_per_cell[cell->active_cell_index()],
+                          min_old_solution_per_cell_temp[cell->neighbor(face_no)->child(l)->active_cell_index()]);
+                }
+            }
+          }
+    }
+    max_old_solution_per_cell_temp = max_old_solution_per_cell;
+    min_old_solution_per_cell_temp = min_old_solution_per_cell;
+// find the cell max/min compare to its neighbors and neighbors' neighbors
+    cell = dof_handler.begin_active();
+    endc = dof_handler.end();
+    for (; cell != endc; ++cell)
+    {
+      if (cell->is_locally_owned())
+        for (unsigned int face_no=0; face_no<GeometryInfo<dim>::faces_per_cell; ++face_no)
+          if (cell->at_boundary(face_no) == false)
+          {
+            fe_face_values.reinit (cell, face_no);
+            fe_face_values[introspection.extractors.velocities].get_function_values (old_solution,
+                                                                            velocity_face_values);
+            //bool inflow = true;
+            //for (unsigned int q=0; q<n_q_points_face; ++q)
+              //  if (velocity_face_values[q]*fe_face_values.normal_vector(q) < 0)
+                //  inflow = true;
+           // if (inflow)
+            {
+            if (cell->neighbor(face_no)->active()) {
+              max_old_solution_per_cell[cell->active_cell_index()] = std::max(
+                      max_old_solution_per_cell[cell->active_cell_index()],
+                      max_old_solution_per_cell_temp[cell->neighbor(face_no)->active_cell_index()]);
+              min_old_solution_per_cell[cell->active_cell_index()] = std::min(
+                      min_old_solution_per_cell[cell->active_cell_index()],
+                      min_old_solution_per_cell_temp[cell->neighbor(face_no)->active_cell_index()]);
+            }
+            else
+              for (unsigned int l=0; l<cell->neighbor(face_no)->n_children(); l++)
+                if (cell->neighbor(face_no)->child(l)->active()) {
+                  max_old_solution_per_cell[cell->active_cell_index()] = std::max(
+                          max_old_solution_per_cell[cell->active_cell_index()],
+                          max_old_solution_per_cell_temp[cell->neighbor(face_no)->child(l)->active_cell_index()]);
+                  min_old_solution_per_cell[cell->active_cell_index()] = std::min(
+                          min_old_solution_per_cell[cell->active_cell_index()],
+                          min_old_solution_per_cell_temp[cell->neighbor(face_no)->child(l)->active_cell_index()]);
+                }
+            }
+          }
+    }
+    const double max_solution_exact_global = (advection_field.is_temperature()
+                                              ?
+                                              parameters.global_temperature_max_preset
+                                              :
+                                              parameters.global_composition_max_preset[advection_field.compositional_variable]
+                                             );
+    const double min_solution_exact_global = (advection_field.is_temperature()
+                                              ?
+                                              parameters.global_temperature_min_preset
+                                              :
+                                              parameters.global_composition_min_preset[advection_field.compositional_variable]
+                                             );
+    LinearAlgebra::BlockVector distributed_solution (introspection.index_sets.system_partitioning,
+                                                     mpi_communicator);
+    const unsigned int block_idx = advection_field.block_index(introspection);
+    distributed_solution.block(block_idx) = solution.block(block_idx);
+
+    std::vector<types::global_dof_index> local_dof_indices (finite_element.dofs_per_cell);
+
+    //typename DoFHandler<dim>::active_cell_iterator
+    cell = dof_handler.begin_active();
+    endc = dof_handler.end();
+    for (; cell != endc; ++cell)
+      {
+        if (cell->is_locally_owned())
+          {
+            cell->get_dof_indices (local_dof_indices);
+            //used to find the maximum, minimum
+            fe_values.reinit (cell);
+            fe_values[field].get_function_values(solution, values);
+            //used for the numerical integration
+            fe_values.reinit (cell);
+            fe_values[field].get_function_values(solution, values);
+            //
+            const double max_solution_exact_local = std::min(max_solution_exact_global, max_old_solution_per_cell[cell->active_cell_index()]);
+            const double min_solution_exact_local = std::max(min_solution_exact_global, min_old_solution_per_cell[cell->active_cell_index()]);
+            //Find the local max and local min
+            const double min_solution_local = *std::min_element (values.begin(), values.end());
+            const double max_solution_local = *std::max_element (values.begin(), values.end());
+            //Find the trouble cell
+            if (min_solution_local < min_solution_exact_local
+                || max_solution_local > max_solution_exact_local)
+              {
+                //Compute the cell area and cell solution average
+                double local_area = 0;
+                double local_solution_average = 0;
+                for (unsigned int q = 0; q < n_q_points; ++q)
+                  {
+                    local_area += fe_values.JxW(q);
+                    local_solution_average += values[q]*fe_values.JxW(q);
+                  }
+                local_solution_average /= local_area;
+                /*
+                 * Define theta: a scaling constant used to correct the old solution by the formula
+                 *   new_value = theta * (old_value-old_solution_cell_average)+old_solution_cell_average
+                 * where theta \in [0,1] defined as below.
+                 * After the correction, the new solution does not exceed the user-given
+                 * exact global maximum/minimum values. Meanwhile, the new solution's cell average
+                 * equals to the old solution's cell average.
+                 */
+                double theta = std::min<double>
+                               (1, abs((max_solution_exact_local-local_solution_average)
+                                       /(max_solution_local-local_solution_average)));
+                theta = std::min<double>
+                        (theta, abs((min_solution_exact_local-local_solution_average)
+                                    /(min_solution_local-local_solution_average)));
+                /* Modify the advection degrees of freedom of the numerical solution.
+                 * note that we are using DG elements, so every DoF on a locally owned cell is locally owned;
+                 * this means that we do not need to check whether the 'distributed_solution' vector actually
+                 *  stores the element we read from/write to here.
+                 */
+                for (unsigned int j = 0;
+                     j < finite_element.base_element(advection_field.base_element(introspection)).dofs_per_cell;
+                     ++j)
+                  {
+                    const unsigned int support_point_index = finite_element.component_to_system_index(
+                                                               (advection_field.is_temperature()
+                                                                ?
+                                                                introspection.component_indices.temperature
+                                                                :
+                                                                introspection.component_indices.compositional_fields[advection_field.compositional_variable]
+                                                               ),
+                                                               /*dof index within component=*/ j);
+                    const double solution_value = solution(local_dof_indices[support_point_index]);
+                    const double limited_solution_value = theta * (solution_value-local_solution_average) + local_solution_average;
+                    distributed_solution(local_dof_indices[support_point_index]) = limited_solution_value;
+                  }
+              }
+          }
+      }
+    distributed_solution.compress(VectorOperation::insert);
+    // now get back to the original vector
+    solution.block(block_idx) = distributed_solution.block(block_idx);
+  }
 }
 // explicit instantiation of the functions we implement in this file
 namespace aspect
@@ -1693,6 +1934,7 @@ namespace aspect
   template bool Simulator<dim>::stokes_matrix_depends_on_solution() const; \
   template void Simulator<dim>::interpolate_onto_velocity_system(const TensorFunction<1,dim> &func, LinearAlgebra::Vector &vec);\
   template void Simulator<dim>::apply_limiter_to_dg_solutions(const AdvectionField &advection_field);\
-  template void Simulator<dim>::apply_limiter_to_dg_solutions_local(const AdvectionField &advection_field);
+  template void Simulator<dim>::apply_limiter_to_dg_solutions_local(const AdvectionField &advection_field);\
+  template void Simulator<dim>::apply_slope_limiter_to_dg_solutions(const AdvectionField &advection_field);
   ASPECT_INSTANTIATE(INSTANTIATE)
 }
