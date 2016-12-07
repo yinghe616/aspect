@@ -1701,6 +1701,7 @@ namespace aspect
                              update_normal_vectors | 
                              update_JxW_values);
     std::vector<Tensor<1,dim> > velocity_face_values(n_q_points_face);
+    std::vector<double > face_values(n_q_points_face);
 
     const FEValuesExtractors::Scalar field
       = (advection_field.is_temperature()
@@ -1732,8 +1733,19 @@ namespace aspect
         fe_values.reinit(cell);
         fe_values[field].get_function_values(old_solution, values);
         //fe_values[field].get_function_values(solution, values);
+        unsigned int cell_idx = cell->active_cell_index();
         min_old_solution_per_cell_temp[cell->active_cell_index()] = *std::min_element (values.begin(), values.end());
         max_old_solution_per_cell_temp[cell->active_cell_index()] = *std::max_element (values.begin(), values.end());
+        //Compute the cell area and cell solution average
+        double area = 0;
+        double solution_average = 0;
+        for (unsigned int q = 0; q < n_q_points; ++q)
+              {
+               area += fe_values.JxW(q);
+               solution_average += values[q]*fe_values.JxW(q);
+              }
+        solution_average /= area;
+        solution_cell_average(cell_idx)=solution_average;
       }
     }
     max_old_solution_per_cell = max_old_solution_per_cell_temp;
@@ -1745,80 +1757,37 @@ namespace aspect
     for (; cell != endc; ++cell)
     {
       if (cell->is_locally_owned())
-        for (unsigned int face_no=0; face_no<GeometryInfo<dim>::faces_per_cell; ++face_no)
-          if (cell->at_boundary(face_no) == false)
-          {
-            //fe_face_values.reinit (cell, face_no);
-            //fe_face_values[introspection.extractors.velocities].get_function_values (old_solution,
-            //                                                                velocity_face_values);
-            //bool inflow = true;
-         //   for (unsigned int q=0; q<n_q_points_face; ++q)
-           //     if (velocity_face_values[q]*fe_face_values.normal_vector(q) < 0)
-             //     inflow = true;
-            //if (inflow)
-            {
-              if (cell->neighbor(face_no)->active()) {
-              max_old_solution_per_cell[cell->active_cell_index()] = std::max(
-                      max_old_solution_per_cell[cell->active_cell_index()],
-                      max_old_solution_per_cell_temp[cell->neighbor(face_no)->active_cell_index()]);
-              min_old_solution_per_cell[cell->active_cell_index()] = std::min(
-                      min_old_solution_per_cell[cell->active_cell_index()],
-                      min_old_solution_per_cell_temp[cell->neighbor(face_no)->active_cell_index()]);
-            }
-            else
-              for (unsigned int l=0; l<cell->neighbor(face_no)->n_children(); l++)
-                if (cell->neighbor(face_no)->child(l)->active()) {
-                  max_old_solution_per_cell[cell->active_cell_index()] = std::max(
-                          max_old_solution_per_cell[cell->active_cell_index()],
-                          max_old_solution_per_cell_temp[cell->neighbor(face_no)->child(l)->active_cell_index()]);
-                  min_old_solution_per_cell[cell->active_cell_index()] = std::min(
-                          min_old_solution_per_cell[cell->active_cell_index()],
-                          min_old_solution_per_cell_temp[cell->neighbor(face_no)->child(l)->active_cell_index()]);
-                }
-            }
-          }
-    }
-    max_old_solution_per_cell_temp = max_old_solution_per_cell;
-    min_old_solution_per_cell_temp = min_old_solution_per_cell;
-// find the cell max/min compare to its neighbors and neighbors' neighbors
-    cell = dof_handler.begin_active();
-    endc = dof_handler.end();
-    for (; cell != endc; ++cell)
-    {
-      if (cell->is_locally_owned())
+        std::vector<double > average_face_integration(face_no<GeometryInfo<dim>::faces_per_cell);
+        std::vector<double > average_diff(face_no<GeometryInfo<dim>::faces_per_cell);
         for (unsigned int face_no=0; face_no<GeometryInfo<dim>::faces_per_cell; ++face_no)
           if (cell->at_boundary(face_no) == false)
           {
             fe_face_values.reinit (cell, face_no);
-            fe_face_values[introspection.extractors.velocities].get_function_values (old_solution,
-                                                                            velocity_face_values);
-            //bool inflow = true;
-            //for (unsigned int q=0; q<n_q_points_face; ++q)
-              //  if (velocity_face_values[q]*fe_face_values.normal_vector(q) < 0)
-                //  inflow = true;
-           // if (inflow)
-            {
+            fe_face_values[field].get_function_values (solution,
+                                                       face_values);
+            area = 0.0;
+            solution_average =0.0;
+            for (unsigned int q = 0; q < n_q_points_face; ++q)
+              {
+               area += fe_face_values.JxW(q);
+               solution_average += face_values[q]*fe_face_values.JxW(q);
+              }
+            average_diff(face_no)= solution_average;
             if (cell->neighbor(face_no)->active()) {
-              max_old_solution_per_cell[cell->active_cell_index()] = std::max(
-                      max_old_solution_per_cell[cell->active_cell_index()],
-                      max_old_solution_per_cell_temp[cell->neighbor(face_no)->active_cell_index()]);
-              min_old_solution_per_cell[cell->active_cell_index()] = std::min(
-                      min_old_solution_per_cell[cell->active_cell_index()],
-                      min_old_solution_per_cell_temp[cell->neighbor(face_no)->active_cell_index()]);
-            }
+                unsigned int current_cell_idx = cell->active_cell_index();
+                unsigned int neighbour_cell_idx = cell->neighbor(face_no)->active_cell_index();
+                average_diff(face_no)= solution_cell_average(current_cell_index)-
+                                       solution_cell_average(beighbour_cell_index); 
+             }
             else
-              for (unsigned int l=0; l<cell->neighbor(face_no)->n_children(); l++)
-                if (cell->neighbor(face_no)->child(l)->active()) {
-                  max_old_solution_per_cell[cell->active_cell_index()] = std::max(
-                          max_old_solution_per_cell[cell->active_cell_index()],
-                          max_old_solution_per_cell_temp[cell->neighbor(face_no)->child(l)->active_cell_index()]);
-                  min_old_solution_per_cell[cell->active_cell_index()] = std::min(
-                          min_old_solution_per_cell[cell->active_cell_index()],
-                          min_old_solution_per_cell_temp[cell->neighbor(face_no)->child(l)->active_cell_index()]);
-                }
-            }
+            {} 
           }
+       //now apply the minmod function
+        
     }
+    max_old_solution_per_cell_temp = max_old_solution_per_cell;
+    min_old_solution_per_cell_temp = min_old_solution_per_cell;
+
     const double max_solution_exact_global = (advection_field.is_temperature()
                                               ?
                                               parameters.global_temperature_max_preset
