@@ -18,12 +18,11 @@
  <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __aspect__particle_interpolator_bilinear_least_squares_h
-#define __aspect__particle_interpolator_bilinear_least_squares_h
+#ifndef _aspect_particle_interpolator_bilinear_least_squares_h
+#define _aspect_particle_interpolator_bilinear_least_squares_h
 
 #include <aspect/particle/interpolator/interface.h>
 #include <aspect/simulator_access.h>
-#include <deal.II/lac/full_matrix.h>
 
 namespace aspect
 {
@@ -32,7 +31,8 @@ namespace aspect
     namespace Interpolator
     {
       /**
-       * Return the averaged properties of all tracers of the given cell.
+       * Return the interpolated properties of all tracers of the given cell using bilinear least squares method.
+       * Currently, only the two dimensional model is supported.
        *
        * @ingroup ParticleInterpolators
        */
@@ -41,6 +41,8 @@ namespace aspect
       {
         public:
           /**
+           * Return the cell-wise evaluated properties of the bilinear least squares function at the positions.
+           *
            * @copydoc aspect::Particle::Interpolator::Interface::properties_at_points()
            */
           virtual

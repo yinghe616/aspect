@@ -19,12 +19,9 @@
  */
 
 #include <aspect/particle/interpolator/biquadratic_least_squares.h>
-#include <aspect/simulator.h>
 
 #include <deal.II/fe/fe_values.h>
 #include <deal.II/grid/grid_tools.h>
-
-#include <boost/lexical_cast.hpp>
 
 namespace aspect
 {
@@ -32,16 +29,15 @@ namespace aspect
   {
     namespace Interpolator
     {
-      /**
-       * Return the cell-wise evaluated properties of the biquadratic least squares function
-       * at the positions.
-       */
       template <int dim>
       std::vector<std::vector<double> >
       BiquadraticLeastSquares<dim>::properties_at_points(const std::multimap<types::LevelInd, Particle<dim> > &particles,
                                                          const std::vector<Point<dim> > &positions,
                                                          const typename parallel::distributed::Triangulation<dim>::active_cell_iterator &cell) const
       {
+        AssertThrow(dim == 2,
+                    ExcMessage("Currently, the particle interpolator 'biquadratic' is only supported for 2D models."));
+
         typename parallel::distributed::Triangulation<dim>::active_cell_iterator found_cell;
 
         if (cell == typename parallel::distributed::Triangulation<dim>::active_cell_iterator())
@@ -49,15 +45,12 @@ namespace aspect
             // We can not simply use one of the points as input for find_active_cell_around_point
             // because for vertices of mesh cells we might end up getting ghost_cells as return value
             // instead of the local active cell. So make sure we are well in the inside of a cell.
-            Point<dim> approximated_cell_midpoint = positions[0];
-            if (positions.size() > 1)
-              {
-                Tensor<1,dim> direction_to_center;
-                for (unsigned int i = 1; i<positions.size()-1; ++i)
-                  direction_to_center += positions[i] - positions[0];
-                direction_to_center /= positions.size() - 1;
-                approximated_cell_midpoint += direction_to_center;
-              }
+            Assert(positions.size() > 0,
+                   ExcMessage("The particle property interpolator was not given any "
+                              "positions to evaluate the particle properties at."));
+
+            const Point<dim> approximated_cell_midpoint = std::accumulate (positions.begin(), positions.end(), Point<dim>())
+                                                          / static_cast<double> (positions.size());
 
             found_cell =
               (GridTools::find_active_cell_around_point<> (this->get_mapping(),
@@ -80,8 +73,8 @@ namespace aspect
                     ExcMessage("At least one cell contained no particles. The 'constant "
                                "average' interpolation scheme does not support this case. "));
 
-        const unsigned int n_coefficients = 6;
-        dealii::FullMatrix<double> A(n_particles,n_coefficients);
+        const unsigned int matrix_dimension = 6;
+        dealii::FullMatrix<double> A(n_particles,matrix_dimension);
         A = 0;
 
         unsigned int index = 0;
@@ -97,7 +90,7 @@ namespace aspect
             A(index,5) = location[1] * location[1];
           }
 
-        dealii::FullMatrix<double> B(n_coefficients, n_coefficients);
+        dealii::FullMatrix<double> B(matrix_dimension, matrix_dimension);
         A.Tmmult(B, A, false);
         dealii::FullMatrix<double> B_inverse(B);
         B_inverse.gauss_jordan();
@@ -106,20 +99,30 @@ namespace aspect
           {
             dealii::FullMatrix<double> r(6,1);
             r = 0;
+
+            double max_value_for_particle_property = (particle_range.first)->second.get_properties()[i];
+            double min_value_for_particle_property = (particle_range.first)->second.get_properties()[i];
+
             for (typename std::multimap<types::LevelInd, Particle<dim> >::const_iterator particle = particle_range.first;
                  particle != particle_range.second; ++particle)
               {
                 const double particle_property = particle->second.get_properties()[i];
                 const Point<dim> position = particle->second.get_location();
+
                 r(0,0) += particle_property;
                 r(1,0) += particle_property * position[0];
                 r(2,0) += particle_property * position[1];
                 r(3,0) += particle_property * position[0] * position[1];
                 r(4,0) += particle_property * position[0] * position[0];
                 r(5,0) += particle_property * position[1] * position[1];
+
+                if (max_value_for_particle_property < particle_property)
+                  max_value_for_particle_property = particle_property;
+                if (min_value_for_particle_property > particle_property)
+                  min_value_for_particle_property = particle_property;
               }
 
-            dealii::FullMatrix<double> c(6,1);
+            dealii::FullMatrix<double> c(matrix_dimension,1);
             c = 0;
             B_inverse.mmult(c, r);
 
@@ -128,6 +131,11 @@ namespace aspect
               {
                 Point<dim> support_point = *itr;
                 double interpolated_value = c(0,0) + c(1,0)*(support_point[0]) + c(2,0)*(support_point[1]) + c(3,0)*(support_point[0] * support_point[1]) +  c(4,0)*(support_point[0] * support_point[0]) + c(5,0)*(support_point[1] * support_point[1]);
+                if (interpolated_value > max_value_for_particle_property)
+                  interpolated_value = max_value_for_particle_property;
+                else if (interpolated_value < min_value_for_particle_property)
+                  interpolated_value = min_value_for_particle_property;
+
                 properties[index_positions].push_back(interpolated_value);
               }
           }
@@ -147,7 +155,9 @@ namespace aspect
     {
       ASPECT_REGISTER_PARTICLE_INTERPOLATOR(BiquadraticLeastSquares,
                                             "biquadratic",
-                                            "Interpolates particle properties onto support points using a bilinear least squares in the given cell.")
+                                            "Interpolates particle properties onto a vector of points using a "
+                                            "biquadratic least squares method. Currently, only 2D models are "
+                                            "supported. ")
     }
   }
 }
