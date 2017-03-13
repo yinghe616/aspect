@@ -46,7 +46,7 @@ subsection Boundary temperature model
   set Model name = box
 end
 
-subsection Initial conditions
+subsection Initial temperature model
   set Model name = function
   subsection Function
     set Function expression = 0
@@ -65,7 +65,7 @@ subsection Compositional fields
   set Mapped particle properties = advection_particle2:velocity [1], advection_particle:function
 end
 
-subsection Compositional initial conditions
+subsection Initial composition model
   set Model name = function
   subsection Function
     set Variable names      = x,z
@@ -101,17 +101,17 @@ end
 ############### Parameters describing what to do with the solution
 
 subsection Postprocess
-  set List of postprocessors = velocity statistics, composition statistics, tracers
+  set List of postprocessors = velocity statistics, composition statistics, particles
 
   subsection Visualization
     set Time between graphical output = 70
   end
 
-  subsection Tracers
-    set Number of tracers = 100000
+  subsection Particles
+    set Number of particles = 4096
     set Time between data output = 70
     set Data output format = none
-    set List of tracer properties = velocity, function, initial composition
+    set List of particle properties = velocity, function, initial composition
     set Interpolation scheme = bilinear
     set Update ghost particles = true
 
@@ -120,12 +120,11 @@ subsection Postprocess
       set Function expression = 0.5*(1+tanh((0.2+0.02*cos(pi*x/0.9142)-z)/0.02))
     end
 
-    set Particle generator name = random uniform
+    set Particle generator name = reference cell
 
     subsection Generator
-      subsection Probability density function
-        set Variable names      = x,z
-        set Function expression = x*x*z
+      subsection Reference cell
+        set Number of particles per cell per direction = 4
       end
     end
   end

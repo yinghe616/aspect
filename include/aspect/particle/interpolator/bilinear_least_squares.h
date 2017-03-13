@@ -1,5 +1,5 @@
 /*
- Copyright (C) 2016 by the authors of the ASPECT code.
+ Copyright (C) 2017 by the authors of the ASPECT code.
 
  This file is part of ASPECT.
 
@@ -31,7 +31,7 @@ namespace aspect
     namespace Interpolator
     {
       /**
-       * Return the interpolated properties of all tracers of the given cell using bilinear least squares method.
+       * Return the interpolated properties of all particles of the given cell using bilinear least squares method.
        * Currently, only the two dimensional model is supported.
        *
        * @ingroup ParticleInterpolators
