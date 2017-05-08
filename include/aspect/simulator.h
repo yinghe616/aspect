@@ -27,6 +27,8 @@
 #include <deal.II/base/conditional_ostream.h>
 #include <deal.II/base/symmetric_tensor.h>
 
+DEAL_II_DISABLE_EXTRA_DIAGNOSTICS
+
 #include <deal.II/lac/trilinos_block_vector.h>
 #include <deal.II/lac/trilinos_block_sparse_matrix.h>
 #include <deal.II/lac/trilinos_precondition.h>
@@ -38,6 +40,8 @@
 #include <deal.II/fe/fe_system.h>
 #include <deal.II/fe/mapping.h>
 #include <deal.II/base/tensor_function.h>
+
+DEAL_II_ENABLE_EXTRA_DIAGNOSTICS
 
 #include <aspect/global.h>
 #include <aspect/simulator_access.h>
@@ -849,15 +853,14 @@ namespace aspect
        * surface or volume average is decided by a parameter in the
        * input file.
        *
-       * @note This function stores the pressure adjustment in the @p
-       * pressure_adjustment member variable of the current class. It
-       * is there so that we can later use the negative adjustment in
+       * @return This function returns the pressure adjustment by value.
+       * This is so that its negative can later be used again in
        * denormalize_pressure().
        *
        * This function is implemented in
        * <code>source/simulator/helper_functions.cc</code>.
        */
-      void normalize_pressure(LinearAlgebra::BlockVector &vector);
+      double normalize_pressure(LinearAlgebra::BlockVector &vector) const;
 
       /**
        * Invert the action of the normalize_pressure() function above.
@@ -870,13 +873,15 @@ namespace aspect
        * the correct pressure values.
        *
        * @note The adjustment made in this function is done using the
-       * negative of the @p pressure_adjustment member variable
-       * previously set in normalize_pressure().
+       * negative of the @p pressure_adjustment function argument that
+       * would typically have been computed and returned by the
+       * normalize_pressure() function.
        *
        * This function is implemented in
        * <code>source/simulator/helper_functions.cc</code>.
        */
-      void denormalize_pressure(LinearAlgebra::BlockVector &vector,
+      void denormalize_pressure(const double                      pressure_adjustment,
+                                LinearAlgebra::BlockVector       &vector,
                                 const LinearAlgebra::BlockVector &relevant_vector) const;
 
       /**
