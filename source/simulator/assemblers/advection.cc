@@ -438,8 +438,10 @@ namespace aspect
             }
         }
       else if (cell->has_periodic_neighbor (face_no)) {
+        std::cout<< "xxxx test 2a" << std::endl;
           // Periodic temperature/composition term: consider the corresponding periodic faces as the case of interior faces
         this->local_assemble_discontinuous_advection_interior_face_terms(cell, face_no, advection_field, scratch, data);
+        std::cout<< "xxxx test 2b" << std::endl;
       }
       else {
         //Neumann temperature term - no non-zero contribution as only homogeneous Neumann boundary conditions are implemented elsewhere for temperature
@@ -491,6 +493,7 @@ namespace aspect
         const typename DoFHandler<dim>::cell_iterator neighbor = cell->neighbor_or_periodic_neighbor (face_no);
       const bool cell_has_periodic_neighbor = cell->has_periodic_neighbor (face_no);
 
+      std::cout<< "xxxx test" << std::endl;
       if (!(face->has_children()))
         {
           const bool neighbor_or_periodic_neighbor_is_coarser =
@@ -500,7 +503,14 @@ namespace aspect
                        :
                        cell->neighbor_is_coarser(face_no));
 
+          std::cout<< "xxxx face_has_child " << face->has_children() << std::endl;
+          std::cout<< "xxxx face at boundary " << face->at_boundary() << std::endl;
+         // std::cout<< "xxxx neighbor face_has_child " << cell->periodic_neighbor(face_no)->has_children() << std::endl;
+          std::cout<< "xxxx neighbor level " << neighbor->level () << std::endl;
+          std::cout<< "xxxx cell level " << cell->level () << std::endl;
           if (!neighbor_or_periodic_neighbor_is_coarser &&
+                  neighbor->level () == cell->level () &&
+                  neighbor->active() &&
               (((neighbor->is_locally_owned()) && (cell->index() < neighbor->index()))
                ||
                ((!neighbor->is_locally_owned()) && (cell->subdomain_id() < neighbor->subdomain_id()))))
@@ -811,7 +821,6 @@ namespace aspect
         {
           //how does the neighbor talk about this cell?
          // const bool cell_has_periodic_neighbor = cell->has_periodic_neighbor(face_no);
-          std::cout<< "xxxx test" << std::endl;
           const unsigned int neighbor2 =
                   (cell_has_periodic_neighbor
                    ?
