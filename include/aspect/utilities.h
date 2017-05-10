@@ -141,6 +141,17 @@ namespace aspect
                            const dealii::Point<2> &point);
 
     /**
+     * Given a 2d point and a list of points which form a polygon, compute the smallest
+     * distance of the point to the polygon. The sign is negative for points outside of
+     * the polygon and positive for points inside the polygon. Note that the polygon
+     * is required to be convex for this function.
+     */
+    template <int dim>
+    double
+    signed_distance_to_polygon(const std::vector<Point<2> > &point_list,
+                               const dealii::Point<2> &point);
+
+    /**
      * Given a vector @p v in @p dim dimensional space, return a set
      * of (dim-1) vectors that are orthogonal to @p v and to each
      * other. The lengths of these vectors equals that of the original
@@ -813,6 +824,31 @@ namespace aspect
          */
         std_cxx11::unique_ptr<aspect::Utilities::AsciiDataLookup<1> > lookup;
     };
+
+    /**
+     * This function computes a factor which can be used to make sure that the
+     * Jacobian remains positive definite.
+     *
+     * The goal of this function is to find a factor $\alpha$ so that
+     * $2\eta(\varepsilon(\bm u)) I \otimes I +  \alpha\left[a \otimes b + b \otimes a\right]$ remains a
+     * positive definite matrix. Here, $a=\varepsilon(\bm u)$ is the @p strain_rate
+     * and $b=\frac{\partial\eta(\varepsilon(\bm u),p)}{\partial \varepsilon}$ is the derivative of the viscosity
+     * with respect to the strain rate and is given by @p dviscosities_dstrain_rate. Since the viscosity $\eta$
+     * must be positive, there is always a value of $\alpha$ (possibly small) so that the result is a positive
+     * definite matrix. In the best case, we want to choose $\alpha=1$ because that corresponds to the full Newton step,
+     * and so the function never returns anything larger than one.
+     *
+     * The factor is defined by:
+     * $\frac{2\eta(\varepsilon(\bm u))}{\left[1-\frac{b:a}{\|a\| \|b\|} \right]^2\|a\|\|b\|}$. Alpha is
+     * reset to a maximum of one, and if it is smaller then one, a safety_factor scales the alpha to make
+     * sure that the 1-alpha won't get to close to zero.
+     */
+    template<int dim>
+    double compute_spd_factor(const double eta,
+                              const SymmetricTensor<2,dim> &strain_rate,
+                              const SymmetricTensor<2,dim> &dviscosities_dstrain_rate,
+                              const double safety_factor);
+
   }
 }
 

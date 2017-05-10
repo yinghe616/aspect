@@ -31,6 +31,7 @@
 #include <deal.II/base/index_set.h>
 #include <deal.II/base/conditional_ostream.h>
 #include <deal.II/base/quadrature_lib.h>
+#include <deal.II/base/signaling_nan.h>
 #include <deal.II/lac/constraint_matrix.h>
 #include <deal.II/lac/block_sparsity_pattern.h>
 #include <deal.II/lac/sparsity_tools.h>
@@ -212,6 +213,8 @@ namespace aspect
 
     dof_handler (triangulation),
 
+    last_pressure_normalization_adjustment (numbers::signaling_nan<double>()),
+
     rebuild_stokes_matrix (true),
     rebuild_stokes_preconditioner (true)
   {
@@ -359,6 +362,29 @@ namespace aspect
                                      "> is listed as having more "
                                      "than one type of velocity or traction boundary condition in the input file."));
           }
+
+      // Check that the periodic boundaries do not have other boundary conditions set
+      typedef std::set< std::pair< std::pair< types::boundary_id, types::boundary_id>, unsigned int> >
+      periodic_boundary_set;
+      periodic_boundary_set pbs = geometry_model->get_periodic_boundary_pairs();
+
+      for (periodic_boundary_set::iterator p = pbs.begin(); p != pbs.end(); ++p)
+        {
+          //Throw error if we are trying to use the same boundary for more than one boundary condition
+          AssertThrow( is_element( (*p).first.first, parameters.fixed_temperature_boundary_indicators ) == false &&
+                       is_element( (*p).first.second, parameters.fixed_temperature_boundary_indicators ) == false &&
+                       is_element( (*p).first.first, parameters.fixed_composition_boundary_indicators ) == false &&
+                       is_element( (*p).first.second, parameters.fixed_composition_boundary_indicators ) == false &&
+                       is_element( (*p).first.first, boundary_indicator_lists[0] ) == false && // zero velocity
+                       is_element( (*p).first.second, boundary_indicator_lists[0] ) == false && // zero velocity
+                       is_element( (*p).first.first, boundary_indicator_lists[1] ) == false && // tangential velocity
+                       is_element( (*p).first.second, boundary_indicator_lists[1] ) == false && // tangential velocity
+                       is_element( (*p).first.first, boundary_indicator_lists[2] ) == false && // free surface
+                       is_element( (*p).first.second, boundary_indicator_lists[2] ) == false && // free surface
+                       is_element( (*p).first.first, boundary_indicator_lists[3] ) == false && // prescribed traction or velocity
+                       is_element( (*p).first.second, boundary_indicator_lists[3] ) == false,  // prescribed traction or velocity
+                       ExcMessage("Periodic boundaries must not have boundary conditions set."));
+        }
 
       const std::set<types::boundary_id> all_boundary_indicators
         = geometry_model->get_used_boundary_indicators();
@@ -1375,19 +1401,6 @@ namespace aspect
 
       for (periodic_boundary_set::iterator p = pbs.begin(); p != pbs.end(); ++p)
         {
-          //Throw error if we are trying to use the same boundary for more than one boundary condition
-          Assert( is_element( (*p).first.first, parameters.fixed_temperature_boundary_indicators ) == false &&
-                  is_element( (*p).first.second, parameters.fixed_temperature_boundary_indicators ) == false &&
-                  is_element( (*p).first.first, parameters.zero_velocity_boundary_indicators ) == false &&
-                  is_element( (*p).first.second, parameters.zero_velocity_boundary_indicators ) == false &&
-                  is_element( (*p).first.first, parameters.tangential_velocity_boundary_indicators ) == false &&
-                  is_element( (*p).first.second, parameters.tangential_velocity_boundary_indicators ) == false &&
-                  parameters.prescribed_velocity_boundary_indicators.find( (*p).first.first)
-                  == parameters.prescribed_velocity_boundary_indicators.end() &&
-                  parameters.prescribed_velocity_boundary_indicators.find( (*p).first.second)
-                  == parameters.prescribed_velocity_boundary_indicators.end(),
-                  ExcMessage("Periodic boundaries must not have boundary conditions set."));
-
           DoFTools::make_periodicity_constraints(dof_handler,
                                                  (*p).first.first,  //first boundary id
                                                  (*p).first.second, //second boundary id
