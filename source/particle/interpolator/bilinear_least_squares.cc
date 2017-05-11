@@ -89,6 +89,8 @@ namespace aspect
         const unsigned int matrix_dimension = 4;
         dealii::LAPACKFullMatrix<double> A(n_particles, matrix_dimension);
         Vector<double> r(n_particles);
+        //Noticed that the size of matrix A is n_particles x matrix_dimension which usually is not a square matrix,
+        //therefore we solve Ax=r by solving A^TAx= A^Tr
         A = 0;
         r = 0;
 
@@ -115,7 +117,8 @@ namespace aspect
 
         const double threshold = 1e-15;
         unsigned int index_positions = 0;
-
+        // A can be rank deficient if it does not have full rank, therefore not invertable
+        // We solve A^TAx=A^Tr by using singular value decomposition (SVD)
         A.Tmmult(B, A, false);
         A.Tvmult(c_ATr,r);
         B_inverse.compute_svd();
