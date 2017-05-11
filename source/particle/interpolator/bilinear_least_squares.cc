@@ -37,12 +37,20 @@ namespace aspect
                                                       const ComponentMask &selected_properties,
                                                       const typename parallel::distributed::Triangulation<dim>::active_cell_iterator &cell) const
       {
+        const unsigned int n_particle_properties = particles.begin()->second.get_properties().size();
+
+        unsigned int property_index = selected_properties.first_selected_component(selected_properties.size());
+
+        AssertThrow(property_index != numbers::invalid_unsigned_int,
+                    ExcMessage());
+
         AssertThrow(dim == 2,
                     ExcMessage("Currently, the particle interpolator 'bilinear' is only supported for 2D models."));
 
-        typename parallel::distributed::Triangulation<dim>::active_cell_iterator found_cell;
+        const Point<dim> approximated_cell_midpoint = std::accumulate (positions.begin(), positions.end(), Point<dim>())
+                                                      / static_cast<double> (positions.size());
 
-        Point<dim> approximated_cell_midpoint;
+        typename parallel::distributed::Triangulation<dim>::active_cell_iterator found_cell;
 
         if (cell == typename parallel::distributed::Triangulation<dim>::active_cell_iterator())
           {
@@ -53,8 +61,6 @@ namespace aspect
                    ExcMessage("The particle property interpolator was not given any "
                               "positions to evaluate the particle cell_properties at."));
 
-            approximated_cell_midpoint = std::accumulate (positions.begin(), positions.end(), Point<dim>())
-                                         / static_cast<double> (positions.size());
 
             found_cell =
               (GridTools::find_active_cell_around_point<> (this->get_mapping(),
@@ -68,16 +74,12 @@ namespace aspect
         const std::pair<typename std::multimap<types::LevelInd, Particle<dim> >::const_iterator,
               typename std::multimap<types::LevelInd, Particle<dim> >::const_iterator> particle_range = particles.equal_range(cell_index);
 
-        const unsigned int n_particles = std::distance(particle_range.first,particle_range.second);
-        const unsigned int n_particle_properties = particles.begin()->second.get_properties().size();
 
         std::vector<std::vector<double> > cell_properties(positions.size(),
-                                                          std::vector<double>(n_particle_properties, numbers::signaling_nan<double>()));
+                                                          std::vector<double>(n_particle_properties,
+                                                                              numbers::signaling_nan<double>()));
 
-        unsigned int property_index = 0;
-        for (unsigned int i=0; i < n_particle_properties; i++)
-          if (selected_properties[i])
-            property_index = i;
+        const unsigned int n_particles = std::distance(particle_range.first,particle_range.second);
 
         AssertThrow(n_particles != 0,
                     ExcMessage("At least one cell contained no particles. The 'bilinear'"
@@ -91,7 +93,7 @@ namespace aspect
         r = 0;
 
         unsigned int index = 0;
-        double cell_diameter = found_cell->diameter();
+        const double cell_diameter = found_cell->diameter();
         for (typename std::multimap<types::LevelInd, Particle<dim> >::const_iterator particle = particle_range.first;
              particle != particle_range.second; ++particle, ++index)
           {
@@ -122,11 +124,11 @@ namespace aspect
 
         for (typename std::vector<Point<dim> >::const_iterator itr = positions.begin(); itr != positions.end(); ++itr, ++index_positions)
           {
-            Point<dim> support_point = *itr;
-            double interpolated_value = c[0] +
-                                        c[1]*(support_point[0] - approximated_cell_midpoint[0])/cell_diameter +
-                                        c[2]*(support_point[1] - approximated_cell_midpoint[1])/cell_diameter +
-                                        c[3]*(support_point[0] - approximated_cell_midpoint[0])*(support_point[1] - approximated_cell_midpoint[1])/std::pow(cell_diameter,2);
+            const Point<dim> support_point = *itr;
+            const double interpolated_value = c[0] +
+                                              c[1]*(support_point[0] - approximated_cell_midpoint[0])/cell_diameter +
+                                              c[2]*(support_point[1] - approximated_cell_midpoint[1])/cell_diameter +
+                                              c[3]*(support_point[0] - approximated_cell_midpoint[0])*(support_point[1] - approximated_cell_midpoint[1])/std::pow(cell_diameter,2);
             cell_properties[index_positions][property_index] = interpolated_value;
           }
         return cell_properties;
@@ -144,11 +146,11 @@ namespace aspect
     namespace Interpolator
     {
       ASPECT_REGISTER_PARTICLE_INTERPOLATOR(BilinearLeastSquares,
-                                            "bilinear",
+                                            "bilinear least squares",
                                             "Interpolates particle properties onto a vector of points using a "
                                             "bilinear least squares method. Currently only 2D models are "
                                             "supported. Note that because no limiter is utilized this may "
-                                            "result in overshoot and/or undershoot of interpolated property. ")
+                                            "result in overshoot and/or undershoot of interpolated property.")
     }
   }
 }
