@@ -505,13 +505,7 @@ namespace aspect
                              update_JxW_values | update_values    |
                              update_gradients  | update_quadrature_points);
 
-   // MaterialModel::MaterialModelInputs<dim> in(fe_values.n_quadrature_points, this->n_compositional_fields());
-    MaterialModel::MaterialModelInputs<dim> in(fe_values,
-                                               &cell,
-                                               this->introspection(),
-                                               this->get_solution);
-
-   // MaterialModel::MaterialModelOutputs<dim> out(fe_values.n_quadrature_points, this->n_compositional_fields());
+    MaterialModel::MaterialModelOutputs<dim> out(fe_values.n_quadrature_points, this->n_compositional_fields());
 
     std::vector<std::vector<double> > composition_values (this->n_compositional_fields(),std::vector<double> (n_q_points));
 
@@ -530,24 +524,6 @@ namespace aspect
                                                    cell,
                                                    this->introspection(),
                                                    this->get_solution);
-        /*
-        fe_values[this->introspection().extractors.temperature].get_function_values (this->get_solution(), in.temperature);
-        fe_values[this->introspection().extractors.pressure].get_function_values (this->get_solution(), in.pressure);
-        fe_values[this->introspection().extractors.velocities].get_function_values (this->get_solution(), in.velocity);
-        fe_values[this->introspection().extractors.pressure].get_function_gradients (this->get_solution(), in.pressure_gradient);
-
-        for (unsigned int c=0; c<this->n_compositional_fields(); ++c)
-          fe_values[this->introspection().extractors.compositional_fields[c]].get_function_values(this->get_solution(),
-              composition_values[c]);
-        for (unsigned int i=0; i<fe_values.n_quadrature_points; ++i)
-          {
-            for (unsigned int c=0; c<this->n_compositional_fields(); ++c)
-              in.composition[i][c] = composition_values[c][i];
-          }
-        fe_values[this->introspection().extractors.velocities].get_function_symmetric_gradients (this->get_solution(),
-            in.strain_rate);
-        in.position = fe_values.get_quadrature_points();
-        */
 
         this->get_material_model().evaluate(in, out);
 
